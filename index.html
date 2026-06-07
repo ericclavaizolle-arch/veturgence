@@ -4,8 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VetUrgence | Urgences Animales</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
+        body { font-family: 'Inter', sans-serif; }
         .modal { display: none; }
         .modal.active { display: flex; }
     </style>
@@ -13,36 +17,88 @@
 <body class="bg-gray-50 flex flex-col justify-between items-center min-h-screen p-4">
 
     <div class="bg-white rounded-3xl shadow-xl max-w-sm w-full p-6 text-center border border-gray-100 relative mt-4">
-        <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">VetUrgence<span class="text-red-800">+</span></h1>
-        <div class="inline-block bg-red-50 text-red-800 font-bold text-xs px-4 py-1 rounded-full my-3 tracking-wide">Urgences animales 24h/24</div>
-        <button onclick="document.getElementById('modal-symptomes').classList.add('active')" class="w-full bg-red-800 hover:bg-red-900 text-white font-bold py-4 px-6 rounded-2xl mt-6">
-            Analyser les symptômes ➔
+        <div class="flex justify-center mb-4">
+            <img src="logo.png" alt="VetUrgence Logo" class="w-20 h-20 object-contain" onerror="this.style.display='none'; document.getElementById('placeholder-logo').style.display='flex';">
+            <div id="placeholder-logo" class="hidden w-20 h-20 bg-emerald-50 rounded-full items-center justify-center border border-emerald-200">
+                <span class="text-emerald-600 text-3xl">🐾</span>
+            </div>
+        </div>
+
+        <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">VetUrgence<span class="text-[#8B1D1D]">+</span></h1>
+        <div class="inline-block bg-red-50 text-[#8B1D1D] font-bold text-xs px-4 py-1 rounded-full my-3 tracking-wide">Urgences animales 24h/24</div>
+        <h2 class="text-xl font-bold text-slate-800 mt-4 px-2">Votre animal ne va pas bien ?</h2>
+        <p class="text-gray-500 text-sm mt-2 px-4 leading-relaxed">Décrivez les symptômes en quelques mots. Notre IA analyse et vous guide immédiatement.</p>
+
+        <button onclick="openModal('modal-symptomes')" class="w-full bg-[#8B1D1D] hover:bg-[#701616] text-white font-bold py-4 px-6 rounded-2xl mt-6 shadow-md transition-all flex items-center justify-center gap-2 text-base cursor-pointer">
+            Analyser les symptômes <span>➔</span>
         </button>
+        
+        <p class="text-xs text-gray-400 mt-2">Tarif sélectionné : <span id="tarif-badge" class="font-semibold text-slate-600">4,99 €</span> • Résultat en 30 secondes</p>
+
+        <div class="bg-slate-100 border border-slate-200 rounded-2xl p-4 text-left mt-6">
+            <h4 class="text-slate-700 font-bold text-xs tracking-wide uppercase">Information importante</h4>
+            <p class="text-slate-600 text-xs mt-1 leading-relaxed">Cette analyse est là pour vous aider mais ne remplace pas une consultation chez un vétérinaire.</p>
+        </div>
+
+        <h3 class="text-left text-xs font-bold text-slate-400 tracking-wider uppercase mt-8 mb-4">Nos formules</h3>
+        <div class="grid grid-cols-2 gap-3">
+            <div id="formule-1" onclick="selectFormule('2,99 €', 1)" class="formule-card border border-gray-200 rounded-2xl p-4 text-center cursor-pointer hover:border-gray-400 transition-all bg-white">
+                <p class="text-xs font-bold text-slate-700">SOS Instant</p>
+                <p class="text-xl font-extrabold text-slate-900 my-1">2,99€</p>
+            </div>
+            <div id="formule-2" onclick="selectFormule('4,99 €', 2)" class="formule-card border-2 border-[#8B1D1D] rounded-2xl p-4 text-center cursor-pointer relative bg-white">
+                <span class="absolute -top-2.5 left-1/2 transform -translate-x-1/2 bg-[#8B1D1D] text-white font-bold text-[9px] uppercase px-2 py-0.5 rounded">Recommandé</span>
+                <p class="text-xs font-bold text-slate-700 mt-1">SOS Localisation</p>
+                <p class="text-xl font-extrabold text-slate-900 my-1">4,99€</p>
+            </div>
+            <div id="formule-3" onclick="selectFormule('9,99 €', 3)" class="formule-card border border-gray-200 rounded-2xl p-4 text-center cursor-pointer hover:border-gray-400 transition-all bg-white">
+                <p class="text-xs font-bold text-slate-700">Mensuel</p>
+                <p class="text-xl font-extrabold text-slate-900 my-1">9,99€</p>
+            </div>
+            <div id="formule-4" onclick="selectFormule('59 €', 4)" class="formule-card border border-gray-200 rounded-2xl p-4 text-center cursor-pointer hover:border-gray-400 transition-all bg-white">
+                <p class="text-xs font-bold text-slate-700">Annuel</p>
+                <p class="text-xl font-extrabold text-slate-900 my-1">59€</p>
+            </div>
+        </div>
     </div>
+
+    <footer class="w-full text-center py-6 text-[11px] text-gray-400 max-w-sm mt-6">
+        <span onclick="openModal('modal-legals')" class="cursor-pointer hover:text-gray-600 underline">Mentions Légales</span>
+    </footer>
 
     <div id="modal-symptomes" class="modal fixed inset-0 bg-black/50 justify-center items-center p-4 z-50">
         <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-left relative">
-            <button onclick="document.getElementById('modal-symptomes').classList.remove('active')" class="absolute top-4 right-4 text-gray-400 text-lg">&times;</button>
+            <button onclick="closeModal('modal-symptomes')" class="absolute top-4 right-4 text-gray-400">&times;</button>
             <h3 class="text-lg font-bold text-slate-900 mb-4">Décrivez l'urgence</h3>
             <div class="grid grid-cols-3 gap-2 mb-4">
-                <button onclick="selectAnimal('Chien')" id="btn-chien" class="animal-btn border-2 border-red-800 bg-red-50 text-red-800 font-semibold py-2 rounded-xl text-sm">🐶 Chien</button>
-                <button onclick="selectAnimal('Chat')" id="btn-chat" class="animal-btn border border-gray-200 text-slate-700 font-semibold py-2 rounded-xl text-sm">🐱 Chat</button>
-                <button onclick="selectAnimal('Autre')" id="btn-autre" class="animal-btn border border-gray-200 text-slate-700 font-semibold py-2 rounded-xl text-sm">🐾 Autre</button>
+                <button onclick="selectAnimal('Chien')" id="btn-chien" class="animal-btn border-2 border-[#8B1D1D] bg-red-50 text-[#8B1D1D] font-semibold py-2 px-3 rounded-xl text-sm">🐶 Chien</button>
+                <button onclick="selectAnimal('Chat')" id="btn-chat" class="animal-btn border border-gray-200 text-slate-700 font-semibold py-2 px-3 rounded-xl text-sm">🐱 Chat</button>
+                <button onclick="selectAnimal('Autre')" id="btn-autre" class="animal-btn border border-gray-200 text-slate-700 font-semibold py-2 px-3 rounded-xl text-sm">🐾 Autre</button>
             </div>
             <textarea id="symptomes-text" rows="4" class="w-full border border-gray-200 rounded-xl p-3 text-sm mb-4" placeholder="Ex: Mon chien vomit..."></textarea>
-            <button onclick="triggerPayment()" class="w-full bg-red-800 text-white font-bold py-3 rounded-xl">Analyser maintenant</button>
+            <button onclick="triggerPayment()" class="w-full bg-[#8B1D1D] text-white font-bold py-3 rounded-xl">Analyser maintenant</button>
         </div>
     </div>
 
     <script>
+        let selectedPlanId = 2;
         let selectedAnimalType = "Chien";
+
+        function selectFormule(prix, planId) {
+            selectedPlanId = planId;
+            document.getElementById('tarif-badge').innerText = prix;
+        }
+
         function selectAnimal(type) {
             selectedAnimalType = type;
-            document.querySelectorAll('.animal-btn').forEach(b => {
-                b.className = 'animal-btn border border-gray-200 text-slate-700 font-semibold py-2 rounded-xl text-sm';
+            document.querySelectorAll('.animal-btn').forEach(btn => {
+                btn.className = 'animal-btn border border-gray-200 text-slate-700 font-semibold py-2 px-3 rounded-xl text-sm';
             });
-            document.getElementById(`btn-${type.toLowerCase()}`).className = 'animal-btn border-2 border-red-800 bg-red-50 text-red-800 font-semibold py-2 rounded-xl text-sm';
+            document.getElementById(`btn-${type.toLowerCase()}`).className = 'animal-btn border-2 border-[#8B1D1D] bg-red-50 text-[#8B1D1D] font-semibold py-2 px-3 rounded-xl text-sm';
         }
+
+        function openModal(id) { document.getElementById(id).classList.add('active'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
 
         async function triggerPayment() {
             const texte = document.getElementById('symptomes-text').value.trim();
@@ -52,15 +108,15 @@
                 const response = await fetch("https://avrkezveyrbvhpzpiyyb.supabase.co/functions/v1/smooth-handler", {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ query: `${selectedAnimalType} : ${texte}` })
+                    body: JSON.stringify({ 
+                        plan: selectedPlanId, 
+                        animal: selectedAnimalType, 
+                        query: texte 
+                    })
                 });
-                
                 const data = await response.json();
-                if(data && data.length > 0) {
-                    const i = data[0];
-                    alert("Diagnostic : " + i["Suspicion de maladie(s)"] + "\nUrgence : " + i["État d'urgence"]);
-                } else { alert("Aucun résultat."); }
-            } catch (err) { alert("Erreur réseau : " + err.message); }
+                alert("Réponse : " + JSON.stringify(data));
+            } catch (err) { alert("Erreur : " + err.message); }
         }
     </script>
 </body>
