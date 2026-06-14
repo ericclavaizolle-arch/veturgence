@@ -1,262 +1,672 @@
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VetUrgence | Urgences Animales</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <!-- Police Inter pour un rendu pro -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <title>VetUrgence+ | Sachez en 30 secondes si c'est grave</title>
+    <link href="./VetUrgence+ _ Sachez en 30 secondes si c&#39;est grave_files/tailwind.min.css" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
         .modal { display: none; }
         .modal.active { display: flex; }
+        .plan-card { cursor: pointer; transition: all 0.2s; }
+        .plan-card.selected { border-color: #7f1d1d !important; background: #fff5f5; }
+        .spinner { border: 3px solid #f3f3f3; border-top: 3px solid #7f1d1d; border-radius: 50%; width: 32px; height: 32px; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .fade-in { animation: fadeUp 0.4s ease; }
+        @keyframes fadeUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:translateY(0); } }
+        .blur-locked { filter: blur(4px); user-select: none; pointer-events: none; }
+        .urgency-pulse { animation: urgPulse 2s ease-in-out infinite; }
+        @keyframes urgPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(220,38,38,0.3); } 50% { box-shadow: 0 0 0 8px rgba(220,38,38,0); } }
+        .legal-content h2 { font-size:0.95rem; font-weight:700; color:#1e293b; margin:1.2rem 0 0.4rem; }
+        .legal-content p, .legal-content li { font-size:0.82rem; color:#475569; line-height:1.7; }
+        .legal-content ul { list-style:disc; padding-left:1.2rem; margin-bottom:0.6rem; }
+        .tab-btn.active { background:#7f1d1d !important; color:white !important; }
     </style>
 </head>
-<body class="bg-gray-50 flex flex-col justify-between items-center min-h-screen p-4">
+<body class="bg-gray-50 min-h-screen">
 
-    <!-- CONTAINER PRINCIPAL (Format Mobile App) -->
-    <div class="bg-white rounded-3xl shadow-xl max-w-sm w-full p-6 text-center border border-gray-100 relative mt-4">
-        
-        <!-- LOGO (Taille fixe 80x80px - image_2.png) -->
-        <div class="flex justify-center mb-4">
-            <img src="logo.png" alt="VetUrgence Logo" class="w-20 h-20 object-contain" onerror="this.style.display='none'; document.getElementById('placeholder-logo').style.display='flex';">
-            <!-- Logo temporaire de secours si le fichier logo.png n'est pas encore dans le dossier -->
-            <div id="placeholder-logo" class="hidden w-20 h-20 bg-emerald-50 rounded-full items-center justify-center border border-emerald-200">
-                <span class="text-emerald-600 text-3xl">🐾</span>
-            </div>
+<!-- ==================== PAGE PRINCIPALE ==================== -->
+<div class="min-h-screen flex flex-col justify-center items-center p-4">
+  <div class="bg-white rounded-3xl shadow-xl max-w-sm w-full border border-gray-100 overflow-hidden">
+
+    <!-- Hero -->
+    <div class="bg-red-800 px-8 pt-8 pb-6 text-center">
+      <!-- MODIFICATION ICI : Logo SVG noir sur fond blanc -->
+      <div class="w-14 h-14 rounded-full bg-white flex items-center justify-center mx-auto mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 100 100" fill="#000000">
+          <path d="M45 65c-15 0-25 15-25 25s15 10 25 10 25-5 25-10-10-25-25-25z"/>
+          <ellipse cx="25" cy="45" rx="10" ry="15" transform="rotate(-15 25 45)"/>
+          <ellipse cx="75" cy="45" rx="10" ry="15" transform="rotate(15 75 45)"/>
+          <ellipse cx="40" cy="20" rx="8" ry="12" transform="rotate(-5 40 20)"/>
+          <ellipse cx="60" cy="20" rx="8" ry="12" transform="rotate(5 60 20)"/>
+        </svg>
+      </div>
+      <h1 class="text-2xl font-black text-white mb-1">VetUrgence<span class="text-red-200">+</span></h1>
+      <p class="text-red-200 text-xs font-medium mb-4">Urgences animales 24h/24</p>
+      <h2 class="text-lg font-bold text-white leading-snug">
+        En 30 secondes, sachez si votre animal doit voir un vétérinaire immédiatement.
+      </h2>
+    </div>
+
+    <!-- Corps -->
+    <div class="px-6 py-6">
+
+      <!-- Bénéfices -->
+      <div class="space-y-2 mb-6">
+        <div class="flex items-center gap-3 text-sm text-gray-700">
+          <span class="text-green-600 font-bold text-base">✓</span> Savoir si c'est grave ou non
+        </div>
+        <div class="flex items-center gap-3 text-sm text-gray-700">
+          <span class="text-green-600 font-bold text-base">✓</span> Éviter une consultation inutile
+        </div>
+        <div class="flex items-center gap-3 text-sm text-gray-700">
+          <span class="text-green-600 font-bold text-base">✓</span> Trouver un vétérinaire de garde
+        </div>
+        <div class="flex items-center gap-3 text-sm text-gray-700">
+          <span class="text-green-600 font-bold text-base">✓</span> Être rassuré en moins de 30 secondes
+        </div>
+      </div>
+
+      <!-- CTA gratuit -->
+      <button onclick="openAnalyseModal()" class="w-full bg-red-800 hover:bg-red-900 text-white font-bold py-4 rounded-2xl text-base transition-all mb-2">
+        Analyser les symptômes gratuitement →
+      </button>
+      <p class="text-xs text-center text-gray-400 mb-5">Gratuit · Sans inscription · Résultat immédiat</p>
+
+      <!-- Disclaimer -->
+      <div class="bg-gray-100 rounded-2xl p-4 mb-6">
+        <p class="text-xs font-bold text-gray-600 mb-1">ℹ️ Information importante</p>
+        <p class="text-xs text-gray-500 leading-relaxed">Cette analyse est là pour vous aider mais ne remplace pas une consultation chez un vétérinaire.</p>
+      </div>
+
+      <!-- Plans -->
+      <p class="text-xs font-bold text-gray-400 uppercase tracking-widest text-center mb-3">Nos formules</p>
+      <div class="grid grid-cols-2 gap-2 mb-2">
+
+        <div class="plan-card border-2 border-gray-200 rounded-2xl p-3" data-plan="instant" onclick="selectPlan(this)">
+          <p class="text-xs font-semibold text-gray-600 mb-1">SOS Instant</p>
+          <p class="text-xl font-black text-red-800">4,99€</p>
+          <p class="text-xs text-gray-400 mt-1">Rapport complet</p>
         </div>
 
-        <!-- Titres -->
-        <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">VetUrgence<span class="text-[#8B1D1D]">+</span></h1>
-        
-        <div class="inline-block bg-red-50 text-[#8B1D1D] font-bold text-xs px-4 py-1 rounded-full my-3 tracking-wide">
-            Urgences animales 24h/24
+        <div class="plan-card border-2 border-red-800 rounded-2xl p-3 relative selected" data-plan="localisation" onclick="selectPlan(this)">
+          <span class="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-red-800 text-white text-xs font-bold px-2 py-0.5 rounded-full whitespace-nowrap">⭐ Recommandé</span>
+          <p class="text-xs font-semibold text-gray-600 mb-1">SOS + GPS</p>
+          <p class="text-xl font-black text-red-800">4,99€</p>
+          <p class="text-xs text-gray-400 mt-1">+ Vétérinaires GPS</p>
         </div>
 
-        <h2 class="text-xl font-bold text-slate-800 mt-4 px-2">Votre animal ne va pas bien ?</h2>
-        <p class="text-gray-500 text-sm mt-2 px-4 leading-relaxed">
-            Décrivez les symptômes en quelques mots. Notre IA analyse et vous guide immédiatement.
-        </p>
+        <div class="plan-card border-2 border-gray-200 rounded-2xl p-3" data-plan="premium" onclick="selectPlan(this)">
+          <p class="text-xs font-semibold text-gray-600 mb-1">Premium</p>
+          <p class="text-xl font-black text-red-800">9,99€</p>
+          <p class="text-xs text-gray-400 mt-1">/mois · Illimité</p>
+        </div>
 
-        <!-- BOUTON PRINCIPAL D'ACTION -->
-        <button onclick="openModal('modal-symptomes')" class="w-full bg-[#8B1D1D] hover:bg-[#701616] text-white font-bold py-4 px-6 rounded-2xl mt-6 shadow-md transition-all flex items-center justify-center gap-2 text-base cursor-pointer">
-            Analyser les symptômes <span>➔</span>
+        <div class="plan-card border-2 border-gray-200 rounded-2xl p-3" data-plan="annuel" onclick="selectPlan(this)">
+          <p class="text-xs font-semibold text-gray-600 mb-1">Annuel</p>
+          <p class="text-xl font-black text-red-800">59€</p>
+          <p class="text-xs text-gray-400 mt-1">/an · –50%</p>
+        </div>
+
+      </div>
+
+      <!-- Premium détail -->
+      <div class="bg-red-50 border border-red-100 rounded-2xl p-4 mb-6">
+        <p class="text-xs font-bold text-red-800 mb-2">✨ VetUrgence+ Premium inclut :</p>
+        <div class="space-y-1">
+          <p class="text-xs text-gray-600">✓ Analyses illimitées</p>
+          <p class="text-xs text-gray-600">✓ Historique de vos animaux</p>
+          <p class="text-xs text-gray-600">✓ Carnet de santé numérique</p>
+          <p class="text-xs text-gray-600">✓ Alertes vaccins &amp; rappels</p>
+          <p class="text-xs text-gray-600">✓ Chat IA vétérinaire 24h/24</p>
+        </div>
+      </div>
+
+      <!-- Footer légal -->
+      <div class="border-t border-gray-100 pt-4">
+        <div class="flex flex-wrap justify-center gap-x-3 gap-y-1 mb-2">
+          <button onclick="openLegal('mentions')" class="text-xs text-gray-400 hover:text-red-800 underline">Mentions légales</button>
+          <button onclick="openLegal('cgv')" class="text-xs text-gray-400 hover:text-red-800 underline">CGV</button>
+          <button onclick="openLegal('cgu')" class="text-xs text-gray-400 hover:text-red-800 underline">CGU</button>
+          <button onclick="openLegal('rgpd')" class="text-xs text-gray-400 hover:text-red-800 underline">RGPD</button>
+          <button onclick="openContact()" class="text-xs text-gray-400 hover:text-red-800 underline">Contact</button>
+        </div>
+        <p class="text-xs text-gray-300 text-center">© 2025 VetUrgence+ · Tous droits réservés</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- ==================== MODALE ANALYSE (GRATUITE) ==================== -->
+<div id="modal-analyse" class="modal fixed inset-0 bg-black bg-opacity-60 justify-center items-center p-4 z-50">
+  <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative shadow-2xl">
+    <button onclick="closeModal('modal-analyse')" class="absolute top-4 right-4 text-gray-400 text-xl font-bold">×</button>
+    <h3 class="text-lg font-bold text-gray-900 mb-1">Décrivez l'urgence</h3>
+    <p class="text-xs text-gray-400 mb-4">L'analyse du niveau d'urgence est gratuite</p>
+
+    <!-- Animal -->
+    <div class="grid grid-cols-3 gap-2 mb-4">
+      <button onclick="selectAnimal('Chien')" id="btn-chien" class="animal-btn border-2 border-red-800 bg-red-50 text-red-800 font-semibold py-2 rounded-xl text-sm">🐶 Chien</button>
+      <button onclick="selectAnimal('Chat')" id="btn-chat" class="animal-btn border border-gray-200 text-gray-700 font-semibold py-2 rounded-xl text-sm">🐱 Chat</button>
+      <button onclick="selectAnimal('NAC')" id="btn-nac" class="animal-btn border border-gray-200 text-gray-700 font-semibold py-2 rounded-xl text-sm">🐾 NAC</button>
+    </div>
+
+    <textarea id="symptomes-text" rows="4" class="w-full border border-gray-200 rounded-xl p-3 text-sm mb-2 focus:outline-none focus:border-red-800 resize-none" placeholder="Ex: Mon chien vomit depuis 2h, il est apathique et refuse de manger…"></textarea>
+    <p class="text-xs text-gray-400 mb-4">💡 Plus vous êtes précis, plus l'analyse sera pertinente.</p>
+
+    <button onclick="lancerAnalyseGratuite()" id="btn-analyse" class="w-full bg-red-800 hover:bg-red-900 text-white font-bold py-3 rounded-xl text-sm transition-all flex items-center justify-center gap-2">
+      <span id="btn-analyse-text">Analyser maintenant — Gratuit</span>
+    </button>
+  </div>
+</div>
+
+
+<!-- ==================== MODALE RÉSULTAT PARTIEL + PAYWALL ==================== -->
+<div id="modal-urgence" class="modal fixed inset-0 bg-black bg-opacity-60 justify-center items-start p-4 z-50 overflow-y-auto">
+  <div class="bg-white rounded-3xl max-w-sm w-full relative shadow-2xl my-4">
+    <button onclick="closeModal('modal-urgence')" class="absolute top-4 right-4 text-gray-400 text-xl font-bold z-10">×</button>
+
+    <!-- Niveau urgence (visible, gratuit) -->
+    <div id="urgence-header" class="p-6 pb-4"></div>
+
+    <!-- Aperçu flou (locked) -->
+    <div class="px-6 pb-2">
+      <p class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">Aperçu du rapport complet</p>
+      <div class="blur-locked space-y-2 mb-1">
+        <div class="bg-gray-50 rounded-xl p-3">
+          <p class="text-xs font-bold text-gray-500 mb-1">🔍 Suspicions cliniques</p>
+          <p class="text-sm text-gray-700">Gastro-entérite aiguë · Corps étranger ingéré · Intoxication alimentaire</p>
+        </div>
+        <div class="bg-gray-50 rounded-xl p-3">
+          <p class="text-xs font-bold text-gray-500 mb-1">✋ Gestes immédiats</p>
+          <p class="text-sm text-gray-700">Ne pas donner d'eau · Surveiller la respiration · Préparer le transport</p>
+        </div>
+        <div class="bg-gray-50 rounded-xl p-3">
+          <p class="text-xs font-bold text-gray-500 mb-1">🩺 Protocole d'urgence</p>
+          <p class="text-sm text-gray-700">Isolez l'animal dans un endroit calme…</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paywall -->
+    <div class="px-6 pb-6">
+      <div class="bg-red-50 border border-red-100 rounded-2xl p-4 mb-4">
+        <p class="text-sm font-bold text-red-800 mb-2">🔓 Débloquez le rapport complet</p>
+        <div class="space-y-1 mb-3">
+          <p class="text-xs text-gray-700">✓ Suspicions cliniques détaillées</p>
+          <p class="text-xs text-gray-700">✓ Gestes de premiers secours</p>
+          <p class="text-xs text-gray-700">✓ Protocole d'urgence complet</p>
+          <p class="text-xs text-gray-700" id="paywall-gps-line">✓ Vétérinaires ouverts près de vous</p>
+        </div>
+        <button onclick="ouvrirPaiement()" class="w-full bg-red-800 hover:bg-red-900 text-white font-bold py-3 rounded-xl text-sm">
+          Débloquer pour <span id="paywall-price">4,99€</span>
         </button>
-        
-        <p class="text-xs text-gray-400 mt-2">Tarif sélectionné : <span id="tarif-badge" class="font-semibold text-slate-600">4,99 €</span> • Résultat en 30 secondes</p>
-
-        <!-- AVERTISSEMENT LÉGAL / DISCLAIMER -->
-        <div class="bg-slate-100 border border-slate-200 rounded-2xl p-4 text-left mt-6">
-            <h4 class="text-slate-700 font-bold text-xs tracking-wide uppercase">Information importante</h4>
-            <p class="text-slate-600 text-xs mt-1 leading-relaxed">
-                Cette analyse est là pour vous aider mais ne remplace pas une consultation chez un vétérinaire.
-            </p>
-        </div>
-
-        <!-- LES 4 FORMULES -->
-        <h3 class="text-left text-xs font-bold text-slate-400 tracking-wider uppercase mt-8 mb-4">Nos formules</h3>
-        
-        <div class="grid grid-cols-2 gap-3">
-            <!-- Formule 1 -->
-            <div id="formule-1" onclick="selectFormule('2,99 €', 1)" class="formule-card border border-gray-200 rounded-2xl p-4 text-center cursor-pointer hover:border-gray-400 transition-all bg-white">
-                <p class="text-xs font-bold text-slate-700">SOS Instant</p>
-                <p class="text-xl font-extrabold text-slate-900 my-1">2,99€</p>
-                <p class="text-[10px] text-gray-400 leading-tight">Diagnostic uniquement</p>
-            </div>
-
-            <!-- Formule 2 (Recommandée par défaut) -->
-            <div id="formule-2" onclick="selectFormule('4,99 €', 2)" class="formule-card border-2 border-[#8B1D1D] rounded-2xl p-4 text-center cursor-pointer relative bg-white">
-                <span class="absolute -top-2.5 left-1/2 transform -translate-x-1/2 bg-[#8B1D1D] text-white font-bold text-[9px] uppercase px-2 py-0.5 rounded">Recommandé</span>
-                <p class="text-xs font-bold text-slate-700 mt-1">SOS Localisation</p>
-                <p class="text-xl font-extrabold text-slate-900 my-1">4,99€</p>
-                <p class="text-[10px] text-gray-400 leading-tight">Diag + Vétérinaires GPS</p>
-            </div>
-
-            <!-- Formule 3 -->
-            <div id="formule-3" onclick="selectFormule('9,99 €', 3)" class="formule-card border border-gray-200 rounded-2xl p-4 text-center cursor-pointer hover:border-gray-400 transition-all bg-white">
-                <p class="text-xs font-bold text-slate-700">Mensuel</p>
-                <p class="text-xl font-extrabold text-slate-900 my-1">9,99€</p>
-                <p class="text-[10px] text-gray-400 leading-tight">Tout compris illimité</p>
-            </div>
-
-            <!-- Formule 4 -->
-            <div id="formule-4" onclick="selectFormule('59 €', 4)" class="formule-card border border-gray-200 rounded-2xl p-4 text-center cursor-pointer hover:border-gray-400 transition-all bg-white">
-                <p class="text-xs font-bold text-slate-700">Annuel</p>
-                <p class="text-xl font-extrabold text-slate-900 my-1">59€</p>
-                <p class="text-[10px] text-gray-400 leading-tight">Tout illimité -50%</p>
-            </div>
-        </div>
+      </div>
+      <p class="text-xs text-center text-gray-400">🔒 Paiement sécurisé · Stripe · SSL 256 bits</p>
     </div>
+  </div>
+</div>
 
-   
 
-    <!-- ==================== FENÊTRES POP-UP (MODALS) ==================== -->
-
-    <!-- POP-UP 1 : SAISIE DES SYMPTÔMES -->
-    <div id="modal-symptomes" class="modal fixed inset-0 bg-black/50 justify-center items-center p-4 z-50">
-        <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-left relative animate-in fade-in zoom-in-95 duration-200">
-            <button onclick="closeModal('modal-symptomes')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-lg cursor-pointer">&times;</button>
-            
-            <h3 class="text-lg font-bold text-slate-900 mb-4">Décrivez l'urgence</h3>
-            
-            <!-- Choix de l'animal via boutons -->
-            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Quel est votre animal ?</label>
-            <div class="grid grid-cols-3 gap-2 mb-4">
-                <button onclick="selectAnimal('Chien')" id="btn-chien" class="animal-btn border-2 border-[#8B1D1D] bg-red-50 text-[#8B1D1D] font-semibold py-2 px-3 rounded-xl text-sm transition-all cursor-pointer">🐶 Chien</button>
-                <button onclick="selectAnimal('Chat')" id="btn-chat" class="animal-btn border border-gray-200 text-slate-700 font-semibold py-2 px-3 rounded-xl text-sm transition-all cursor-pointer">🐱 Chat</button>
-                <button onclick="selectAnimal('Autre')" id="btn-autre" class="animal-btn border border-gray-200 text-slate-700 font-semibold py-2 px-3 rounded-xl text-sm transition-all cursor-pointer">🐾 Autre</button>
-            </div>
-
-            <!-- Champ libre de texte -->
-            <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-2">Quels sont ses symptômes ?</label>
-            <textarea id="symptomes-text" rows="4" class="w-full border border-gray-200 rounded-xl p-3 text-sm focus:outline-none focus:border-[#8B1D1D] resize-none mb-4" placeholder="Ex: Mon chien vomit depuis ce matin, il refuse de boire et reste prostré..."></textarea>
-
-            <!-- Bouton de verrouillage vers Stripe -->
-            <button onclick="triggerPayment()" class="w-full bg-[#8B1D1D] hover:bg-[#701616] text-white font-bold py-3 px-4 rounded-xl text-center block shadow-md transition-all cursor-pointer">
-                Procéder au paiement
-            </button>
-        </div>
+<!-- ==================== MODALE PAIEMENT ==================== -->
+<div id="modal-paiement" class="modal fixed inset-0 bg-black bg-opacity-60 justify-center items-center p-4 z-50">
+  <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative shadow-2xl">
+    <button onclick="closeModal('modal-paiement')" class="absolute top-4 right-4 text-gray-400 text-xl font-bold">×</button>
+    <h3 class="text-lg font-bold text-gray-900 mb-1">Finaliser le paiement</h3>
+    <div class="bg-red-50 rounded-xl px-4 py-2 mb-4">
+      <p class="text-sm font-semibold text-red-800" id="paiement-label">SOS Localisation – 4,99€</p>
     </div>
-
-    <!-- POP-UP 2 : FORMULAIRE DE CONTACT -->
-    <div id="modal-contact" class="modal fixed inset-0 bg-black/50 justify-center items-center p-4 z-50">
-        <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-left relative">
-            <button onclick="closeModal('modal-contact')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-lg cursor-pointer">&times;</button>
-            
-            <h3 class="text-lg font-bold text-slate-900 mb-4">Nous contacter</h3>
-            
-            <div class="space-y-3">
-                <div>
-                    <label class="block text-xs font-semibold text-gray-500 mb-1">Votre Nom</label>
-                    <input type="text" class="w-full border border-gray-200 rounded-xl p-2 text-sm focus:outline-none focus:border-[#8B1D1D]">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-500 mb-1">Votre Email</label>
-                    <input type="email" class="w-full border border-gray-200 rounded-xl p-2 text-sm focus:outline-none focus:border-[#8B1D1D]">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-gray-500 mb-1">Votre Message</label>
-                    <textarea rows="3" class="w-full border border-gray-200 rounded-xl p-2 text-sm focus:outline-none focus:border-[#8B1D1D] resize-none"></textarea>
-                </div>
-                <button onclick="alert('Message envoyé ! (Simulation)'); closeModal('modal-contact');" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-xl text-center shadow-md cursor-pointer transition-all">
-                    Envoyer
-                </button>
-            </div>
-        </div>
+    <div class="flex flex-col gap-3 mb-4">
+      <button onclick="payWith('apple')" class="flex items-center justify-center gap-2 bg-black text-white font-bold py-3 rounded-xl text-sm">🍎 Apple Pay</button>
+      <button onclick="payWith('google')" class="flex items-center justify-center gap-2 bg-white border border-gray-200 text-gray-800 font-bold py-3 rounded-xl text-sm"><span class="font-black text-blue-500">G</span> Google Pay</button>
+      <button onclick="showCardForm()" class="flex items-center justify-center gap-2 bg-red-800 text-white font-bold py-3 rounded-xl text-sm">💳 Carte bancaire</button>
     </div>
-
-    <!-- POP-UP 3 : TEXTES LÉGAUX À ONGLETS -->
-    <div id="modal-legals" class="modal fixed inset-0 bg-black/50 justify-center items-center p-4 z-50">
-        <div class="bg-white rounded-3xl max-w-sm w-full p-6 text-left relative flex flex-col max-h-[80vh]">
-            <button onclick="closeModal('modal-legals')" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 text-lg cursor-pointer">&times;</button>
-            
-            <h3 class="text-lg font-bold text-slate-900 mb-4">Informations Légales</h3>
-            
-            <!-- Onglets -->
-            <div class="flex border-b border-gray-200 mb-4 text-xs font-bold text-gray-400">
-                <button onclick="switchTab('tab-mentions')" id="btn-tab-mentions" class="tab-btn pb-2 pr-3 text-[#8B1D1D] border-b-2 border-[#8B1D1D] cursor-pointer">Mentions</button>
-                <button onclick="switchTab('tab-cgv')" id="btn-tab-cgv" class="tab-btn pb-2 px-3 cursor-pointer">CGV/CGU</button>
-                <button onclick="switchTab('tab-rgpd')" id="btn-tab-rgpd" class="tab-btn pb-2 px-3 cursor-pointer">RGPD</button>
-            </div>
-
-            <!-- Contenus des onglets -->
-            <div class="overflow-y-auto text-xs text-gray-600 space-y-2 flex-1 pr-2">
-                <div id="tab-mentions" class="tab-content">
-                    <p class="font-bold">1. Éditeur du site</p>
-                    <p>L'application VetUrgence est éditée par [Nom de l'entreprise], [Forme juridique] au capital de [Montant]€, immatriculée au RCS sous le numéro [Numéro SIRET].</p>
-                    <p class="font-bold mt-2">2. Hébergement</p>
-                    <p>Le site est hébergé par Vercel Inc., 650 California St, San Francisco, CA 94108.</p>
-                </div>
-                
-                <div id="tab-cgv" class="tab-content hidden">
-                    <p class="font-bold">Conditions Générales de Vente et d'Utilisation</p>
-                    <p>Le service fourni est un outil d'aide à la décision basé sur l'IA et une base de connaissances. Il ne remplace en aucun cas une consultation physique chez un vétérinaire diplômé.</p>
-                    <p class="font-bold mt-2">Droit de rétractation</p>
-                    <p>Conformément à la loi française, l'exécution immédiate du diagnostic après paiement entraîne la renonciation expresse au droit de rétractation.</p>
-                </div>
-
-                <div id="tab-rgpd" class="tab-content hidden">
-                    <p class="font-bold">Protection des données (RGPD)</p>
-                    <p>Nous collectons votre adresse email via le module de paiement pour la gestion et le suivi de vos diagnostics.</p>
-                    <p class="font-bold mt-2">Vos droits</p>
-                    <p>Vous disposez d'un droit d'accès, de rectification et de suppression de vos données en contactant notre support.</p>
-                </div>
-            </div>
-        </div>
+    <div id="card-form" style="display:none">
+      <div id="card-element" class="border border-gray-200 rounded-xl p-3 mb-3 min-h-10"></div>
+      <div id="card-errors" class="text-red-600 text-xs mb-2"></div>
+      <button onclick="confirmCard()" id="btn-confirm-card" class="w-full bg-red-800 text-white font-bold py-3 rounded-xl text-sm">Confirmer le paiement</button>
     </div>
+    <p class="text-xs text-center text-gray-400 mt-3">🔒 SSL 256 bits · Stripe · Aucune donnée stockée</p>
+  </div>
+</div>
 
-    <!-- ==================== LOGIQUE INTERACTION UI BASIQUE ==================== -->
-    <script>
-        let selectedPrice = "4,99 €";
-        let selectedPlanId = 2;
-        let selectedAnimalType = "Chien";
 
-        // Sélection des formules
-        function selectFormule(prix, planId) {
-            selectedPrice = prix;
-            selectedPlanId = planId;
-            document.getElementById('tarif-badge').innerText = prix;
-            
-            // Mise à jour visuelle des bordures
-            document.querySelectorAll('.formule-card').forEach(card => {
-                card.classList.remove('border-2', 'border-[#8B1D1D]');
-                card.classList.add('border', 'border-gray-200');
-            });
-            const activeCard = document.getElementById(`formule-${planId}`);
-            activeCard.classList.remove('border', 'border-gray-200');
-            activeCard.classList.add('border-2', 'border-[#8B1D1D]');
-        }
+<!-- ==================== MODALE RAPPORT COMPLET ==================== -->
+<div id="modal-rapport" class="modal fixed inset-0 bg-black bg-opacity-60 justify-center items-start p-4 z-50 overflow-y-auto">
+  <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative shadow-2xl my-4">
+    <button onclick="closeModal('modal-rapport')" class="absolute top-4 right-4 text-gray-400 text-xl font-bold">×</button>
+    <div class="flex items-center gap-2 mb-4">
+      <span class="text-green-600 text-xl">✅</span>
+      <h3 class="text-lg font-bold text-gray-900">Rapport complet débloqué</h3>
+    </div>
+    <div id="rapport-content" class="fade-in"></div>
+  </div>
+</div>
 
-        // Sélection de l'animal dans la pop-up
-        function selectAnimal(type) {
-            selectedAnimalType = type;
-            document.querySelectorAll('.animal-btn').forEach(btn => {
-                btn.classList.remove('border-2', 'border-[#8B1D1D]', 'bg-red-50', 'text-[#8B1D1D]');
-                btn.classList.add('border', 'border-gray-200', 'text-slate-700');
-            });
-            const activeBtn = document.getElementById(`btn-${type.toLowerCase()}`);
-            activeBtn.classList.remove('border', 'border-gray-200', 'text-slate-700');
-            activeBtn.classList.add('border-2', 'border-[#8B1D1D]', 'bg-red-50', 'text-[#8B1D1D]');
-        }
 
-        // Gestion de l'ouverture / fermeture des modals
-        function openModal(id) {
-            document.getElementById(id).classList.add('active');
-        }
-        function closeModal(id) {
-            document.getElementById(id).classList.remove('active');
-        }
+<!-- ==================== MODALE GOOGLE MAPS ==================== -->
+<div id="modal-maps" class="modal fixed inset-0 bg-black bg-opacity-60 justify-center items-center p-4 z-50">
+  <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative shadow-2xl">
+    <button onclick="closeModal('modal-maps')" class="absolute top-4 right-4 text-gray-400 text-xl font-bold">×</button>
+    <h3 class="text-lg font-bold text-gray-900 mb-2">📍 Vétérinaires proches</h3>
+    <p class="text-xs text-gray-500 mb-3" id="maps-status">Localisation en cours…</p>
+    <div id="map" class="w-full rounded-2xl mb-4" style="height:240px; background:#f1f5f9;"></div>
+    <button onclick="openGoogleMapsExternal()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2">
+      📍 Ouvrir dans Google Maps
+    </button>
+  </div>
+</div>
 
-        // Changement d'onglets (Légal)
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(content => content.classList.add('hidden'));
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('text-[#8B1D1D]', 'border-b-2', 'border-[#8B1D1D]');
-            });
-            
-            document.getElementById(tabId).classList.remove('hidden');
-            document.getElementById(`btn-${tabId}`).classList.add('text-[#8B1D1D]', 'border-b-2', 'border-[#8B1D1D]');
-        }
 
-        // Simulation du clic sur Procéder au paiement
-        function triggerPayment() {
-            const texte = document.getElementById('symptomes-text').value.trim();
-            if(!texte) {
-                alert("Veuillez décrire brièvement les symptômes.");
-                return;
-            }
-            alert(`Redirection Stripe validée.\nFormule : Plan ${selectedPlanId} (${selectedPrice})\nAnimal : ${selectedAnimalType}\nTexte : "${texte}"`);
-            closeModal('modal-symptomes');
-        }
-    </script>
-<footer style="margin-top: 20px; padding: 20px; text-align: center; font-size: 12px; border-top: 1px solid #ccc;">
-    <p>© 2026 VetUrgence - Tous droits réservés</p>
-    <a href="cgv.html" style="margin: 0 10px; color: #555;">CGV</a> | 
-    <a href="mentions.html" style="margin: 0 10px; color: #555;">Mentions Légales</a>
-</footer>
+<!-- ==================== MODALE LÉGALE ==================== -->
+<div id="modal-legal" class="modal fixed inset-0 bg-black bg-opacity-60 justify-center items-start p-4 z-50 overflow-y-auto">
+  <div class="bg-white rounded-3xl max-w-sm w-full relative shadow-2xl my-4">
+    <div class="sticky top-0 bg-white rounded-t-3xl p-4 border-b border-gray-100 z-10">
+      <button onclick="closeModal('modal-legal')" class="absolute top-4 right-4 text-gray-400 text-xl font-bold">×</button>
+      <h3 class="text-base font-bold text-gray-900 mb-3">Documents légaux</h3>
+      <div class="flex gap-2 flex-wrap">
+        <button onclick="switchTab('mentions')" id="tab-mentions" class="tab-btn active text-xs font-semibold px-3 py-1.5 rounded-full border border-gray-200">Mentions</button>
+        <button onclick="switchTab('cgv')" id="tab-cgv" class="tab-btn text-xs font-semibold px-3 py-1.5 rounded-full border border-gray-200">CGV</button>
+        <button onclick="switchTab('cgu')" id="tab-cgu" class="tab-btn text-xs font-semibold px-3 py-1.5 rounded-full border border-gray-200">CGU</button>
+        <button onclick="switchTab('rgpd')" id="tab-rgpd" class="tab-btn text-xs font-semibold px-3 py-1.5 rounded-full border border-gray-200">RGPD</button>
+      </div>
+    </div>
+    <div class="p-5 legal-content" id="legal-content"></div>
+  </div>
+</div>
+
+
+<!-- ==================== MODALE CONTACT ==================== -->
+<div id="modal-contact" class="modal fixed inset-0 bg-black bg-opacity-60 justify-center items-center p-4 z-50">
+  <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative shadow-2xl">
+    <button onclick="closeModal('modal-contact')" class="absolute top-4 right-4 text-gray-400 text-xl font-bold">×</button>
+    <div class="flex justify-center mb-3"><div class="w-12 h-12 rounded-full bg-red-50 flex items-center justify-center text-xl">✉️</div></div>
+    <h3 class="text-lg font-bold text-gray-900 text-center mb-1">Nous contacter</h3>
+    <p class="text-xs text-gray-400 text-center mb-5">Une question ? On vous répond sous 24h.</p>
+    <div class="space-y-3 mb-4">
+      <input id="contact-nom" type="text" placeholder="Votre nom" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-800">
+      <input id="contact-email" type="email" placeholder="Votre email" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-800">
+      <select id="contact-sujet" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-800 text-gray-600">
+        <option value="">Sujet</option>
+        <option>Question sur un diagnostic</option>
+        <option>Problème de paiement</option>
+        <option>Problème technique</option>
+        <option>Remboursement</option>
+        <option>Autre</option>
+      </select>
+      <textarea id="contact-message" rows="3" placeholder="Votre message…" class="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-red-800 resize-none"></textarea>
+    </div>
+    <button onclick="sendContact()" class="w-full bg-red-800 hover:bg-red-900 text-white font-bold py-3 rounded-xl text-sm transition-all">Envoyer</button>
+    <p class="text-xs text-center text-gray-400 mt-3">ou <a href="mailto:contact@veturgence.fr" class="text-red-800 font-semibold">contact@veturgence.fr</a></p>
+  </div>
+</div>
+
+
+<!-- ==================== JS ==================== -->
+<script>
+// ─── CONFIG ───────────────────────────────────────────────────
+const CONFIG = {
+  STRIPE_PUBLIC_KEY: 'pk_test_VOTRE_CLE_STRIPE_PUBLIQUE',
+};
+
+const PLANS = {
+  instant:      { price: 4.99,  label: 'SOS Instant – 4,99€',       hasMaps: false },
+  localisation: { price: 4.99,  label: 'SOS Localisation – 4,99€',   hasMaps: true  },
+  premium:      { price: 9.99,  label: 'Premium – 9,99€/mois',       hasMaps: true  },
+  annuel:       { price: 59.88, label: 'Annuel – 59,88€/an',         hasMaps: true  },
+};
+
+const STATE = {
+  animal: 'Chien',
+  plan: 'localisation',
+  hasMaps: true,
+  stripe: null,
+  cardElement: null,
+  lastAnalyse: null,
+  userLat: null,
+  userLng: null,
+};
+
+// Stripe init
+(function(){
+  const s = document.createElement('script');
+  s.src = 'https://js.stripe.com/v3/';
+  s.onload = () => { STATE.stripe = Stripe(CONFIG.STRIPE_PUBLIC_KEY); };
+  document.head.appendChild(s);
+})();
+
+// ─── PLANS ────────────────────────────────────────────────────
+function selectPlan(card) {
+  document.querySelectorAll('.plan-card').forEach(c => {
+    c.classList.remove('selected');
+    c.style.borderColor = '#e5e7eb';
+  });
+  card.classList.add('selected');
+  const p = card.dataset.plan;
+  STATE.plan   = p;
+  STATE.hasMaps = PLANS[p].hasMaps;
+}
+
+// ─── ANIMAL ───────────────────────────────────────────────────
+function selectAnimal(type) {
+  STATE.animal = type;
+  ['chien','chat','nac'].forEach(a => {
+    const b = document.getElementById(`btn-${a}`);
+    if(b) b.className = 'animal-btn border border-gray-200 text-gray-700 font-semibold py-2 rounded-xl text-sm';
+  });
+  const id = type==='NAC'?'btn-nac':`btn-${type.toLowerCase()}`;
+  const active = document.getElementById(id);
+  if(active) active.className = 'animal-btn border-2 border-red-800 bg-red-50 text-red-800 font-semibold py-2 rounded-xl text-sm';
+}
+
+// ─── MODALES ──────────────────────────────────────────────────
+function openAnalyseModal() { document.getElementById('modal-analyse').classList.add('active'); }
+function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+// ─── ÉTAPE 1 : ANALYSE GRATUITE (niveau urgence uniquement) ───
+async function lancerAnalyseGratuite() {
+  const texte = document.getElementById('symptomes-text').value.trim();
+  if(!texte || texte.length < 10) { alert('Veuillez décrire les symptômes.'); return; }
+
+  const btn = document.getElementById('btn-analyse');
+  const btnText = document.getElementById('btn-analyse-text');
+  btnText.innerHTML = '<div class="spinner" style="width:20px;height:20px;border-width:2px;display:inline-block;vertical-align:middle;margin-right:8px;"></div>Analyse en cours…';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch('/api/analyse', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ animal: STATE.animal, symptoms: texte, mode: 'urgency_only' }),
+    });
+    const data = await res.json();
+    if(data.error) throw new Error(data.error);
+
+    STATE.lastAnalyse = data;
+    closeModal('modal-analyse');
+    afficherUrgence(data);
+
+  } catch(err) {
+    alert(err.message || 'Erreur. Réessayez.');
+  } finally {
+    btnText.textContent = 'Analyser maintenant — Gratuit';
+    btn.disabled = false;
+  }
+}
+
+// ─── AFFICHER NIVEAU D'URGENCE (gratuit) ──────────────────────
+function afficherUrgence(data) {
+  const cfg = {
+    high:   { bg:'bg-red-600',    icon:'🚨', label:'ÉLEVÉ',   sub:'Consultez un vétérinaire immédiatement' },
+    medium: { bg:'bg-orange-500', icon:'⚠️', label:'MODÉRÉ',  sub:'Consultez dans les heures qui viennent' },
+    low:    { bg:'bg-green-600',  icon:'ℹ️', label:'FAIBLE',  sub:'Surveillance conseillée sous 24h' },
+  }[data.urgency] || { bg:'bg-orange-500', icon:'⚠️', label:'MODÉRÉ', sub:'Consultez votre vétérinaire' };
+
+  document.getElementById('urgence-header').innerHTML = `
+    <div class="${cfg.bg} rounded-2xl p-4 text-white text-center urgency-pulse mb-4">
+      <div class="text-3xl mb-1">${cfg.icon}</div>
+      <p class="text-xs font-semibold opacity-80 uppercase tracking-wider mb-1">Niveau d'urgence</p>
+      <p class="text-2xl font-black">${cfg.label}</p>
+      <p class="text-xs opacity-90 mt-1">${cfg.sub}</p>
+    </div>`;
+
+  const plan = PLANS[STATE.plan];
+  document.getElementById('paywall-price').textContent = plan.price.toFixed(2).replace('.',',') + '€';
+  document.getElementById('paywall-gps-line').style.display = plan.hasMaps ? 'block' : 'none';
+
+  document.getElementById('modal-urgence').classList.add('active');
+}
+
+// ─── OUVRIR PAIEMENT ──────────────────────────────────────────
+function ouvrirPaiement() {
+  const plan = PLANS[STATE.plan];
+  document.getElementById('paiement-label').textContent = plan.label;
+  document.getElementById('card-form').style.display = 'none';
+  closeModal('modal-urgence');
+  document.getElementById('modal-paiement').classList.add('active');
+}
+
+// ─── PAIEMENT ─────────────────────────────────────────────────
+function payWith(method) {
+  if(!STATE.stripe) { alert('Stripe non initialisé.'); return; }
+  const plan = PLANS[STATE.plan];
+  const pr = STATE.stripe.paymentRequest({
+    country:'FR', currency:'eur',
+    total:{ label: plan.label, amount: Math.round(plan.price*100) },
+    requestPayerName:true, requestPayerEmail:true,
+  });
+  pr.canMakePayment().then(result => {
+    if(result) {
+      pr.show();
+      pr.on('paymentmethod', async ev => { ev.complete('success'); onPaymentSuccess(); });
+    } else {
+      alert(`${method==='apple'?'Apple Pay':'Google Pay'} non disponible. Utilisez la carte bancaire.`);
+    }
+  });
+}
+
+function showCardForm() {
+  document.getElementById('card-form').style.display = 'block';
+  if(!STATE.cardElement && STATE.stripe) {
+    const el = STATE.stripe.elements().create('card', {
+      style:{ base:{ fontSize:'15px', color:'#1e293b' }, invalid:{ color:'#dc2626' } }
+    });
+    el.mount('#card-element');
+    el.on('change', e => { document.getElementById('card-errors').textContent = e.error?e.error.message:''; });
+    STATE.cardElement = el;
+  }
+}
+
+async function confirmCard() {
+  const btn = document.getElementById('btn-confirm-card');
+  btn.textContent = 'Traitement…'; btn.disabled = true;
+  try {
+    await new Promise(r=>setTimeout(r,1200));
+    onPaymentSuccess();
+  } catch(err) {
+    document.getElementById('card-errors').textContent = err.message||'Erreur de paiement.';
+    btn.textContent='Confirmer le paiement'; btn.disabled=false;
+  }
+}
+
+// ─── APRÈS PAIEMENT : RAPPORT COMPLET ─────────────────────────
+async function onPaymentSuccess() {
+  closeModal('modal-paiement');
+
+  if(STATE.lastAnalyse && STATE.lastAnalyse.suspicions) {
+    afficherRapport(STATE.lastAnalyse);
+    return;
+  }
+
+  document.getElementById('rapport-content').innerHTML = `
+    <div class="flex flex-col items-center gap-3 py-6">
+      <div class="spinner"></div>
+      <p class="text-sm text-gray-500">Génération du rapport complet…</p>
+    </div>`;
+  document.getElementById('modal-rapport').classList.add('active');
+
+  try {
+    const texte = document.getElementById('symptomes-text').value.trim();
+    const res = await fetch('/api/analyse', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ animal: STATE.animal, symptoms: texte, mode: 'full' }),
+    });
+    const data = await res.json();
+    if(data.error) throw new Error(data.error);
+    afficherRapport(data);
+  } catch(err) {
+    document.getElementById('rapport-content').innerHTML = `
+      <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-4 text-sm text-yellow-800">⚠️ ${err.message}</div>`;
+  }
+}
+
+function afficherRapport(json) {
+  const u = {
+    high:   { bg:'bg-red-50',    border:'border-red-200',    text:'text-red-800',    icon:'🚨' },
+    medium: { bg:'bg-yellow-50', border:'border-yellow-200', text:'text-yellow-800', icon:'⚠️' },
+    low:    { bg:'bg-green-50',  border:'border-green-200',  text:'text-green-800',  icon:'ℹ️' },
+  }[json.urgency] || { bg:'bg-yellow-50', border:'border-yellow-200', text:'text-yellow-800', icon:'⚠️' };
+
+  const li = arr => (arr||[]).map(x =>
+    `<li class="flex items-start gap-2 text-sm text-gray-700"><span class="text-red-800 font-bold mt-0.5">→</span>${x}</li>`
+  ).join('');
+
+  let html = `
+    <div class="${u.bg} border ${u.border} rounded-2xl p-3 flex items-center gap-2 mb-4">
+      <span class="text-xl">${u.icon}</span>
+      <span class="font-bold text-sm ${u.text}">${json.urgency_label}</span>
+    </div>
+    <div class="mb-4">
+      <p class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">🔍 Suspicions cliniques</p>
+      <ul class="space-y-1">${li(json.suspicions)}</ul>
+    </div>
+    <div class="mb-4">
+      <p class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">✋ Gestes immédiats</p>
+      <ul class="space-y-1">${li(json.gestes)}</ul>
+    </div>
+    <div class="mb-4">
+      <p class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-2">🩺 Protocole d'urgence</p>
+      <p class="text-sm text-gray-700 leading-relaxed">${json.protocole}</p>
+    </div>
+    <div class="bg-gray-50 rounded-xl p-3 mb-4">
+      <p class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-1">💬 Conseil</p>
+      <p class="text-sm text-gray-600 leading-relaxed">${json.advice}</p>
+    </div>`;
+
+  if(STATE.hasMaps) {
+    html += `<button onclick="openMapsModal()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 mb-2">
+      📍 Trouver un vétérinaire ouvert maintenant
+    </button>`;
+  }
+
+  html += `<button onclick="closeModal('modal-rapport')" class="w-full border border-red-800 text-red-800 font-semibold py-3 rounded-xl text-sm">Fermer</button>`;
+
+  document.getElementById('rapport-content').innerHTML = html;
+  document.getElementById('modal-rapport').classList.add('active');
+}
+
+// ─── GOOGLE MAPS ──────────────────────────────────────────────
+function openMapsModal() {
+  closeModal('modal-rapport');
+  document.getElementById('modal-maps').classList.add('active');
+  document.getElementById('maps-status').textContent = 'Localisation en cours…';
+
+  if(navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(pos => {
+      STATE.userLat = pos.coords.latitude;
+      STATE.userLng = pos.coords.longitude;
+      chargerVets(STATE.userLat, STATE.userLng);
+    }, () => chargerVets(48.8566, 2.3522));
+  } else { chargerVets(48.8566, 2.3522); }
+}
+
+async function chargerVets(lat, lng) {
+  STATE.userLat = lat; STATE.userLng = lng;
+  document.getElementById('maps-status').textContent = 'Recherche des vétérinaires…';
+
+  try {
+    const res = await fetch('/api/maps', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ lat, lng }),
+    });
+    const data = await res.json();
+    if(data.error) throw new Error(data.error);
+
+    afficherVets(data.vets, lat, lng);
+  } catch(err) {
+    document.getElementById('maps-status').textContent = 'Impossible de charger les vétérinaires.';
+    console.error(err);
+  }
+}
+
+function afficherVets(vets, userLat, userLng) {
+  const mapEl = document.getElementById('map');
+  const statusEl = document.getElementById('maps-status');
+
+  if(!vets || vets.length === 0) {
+    statusEl.textContent = 'Aucun vétérinaire trouvé à proximité.';
+    return;
+  }
+
+  statusEl.textContent = `${vets.length} vétérinaire(s) trouvé(s) à proximité`;
+
+  mapEl.style.height = 'auto';
+  mapEl.innerHTML = vets.map(v => `
+    <div class="flex items-start gap-3 p-3 border-b border-gray-100 last:border-0">
+      <span class="text-xl mt-0.5">${v.open === true ? '🟢' : v.open === false ? '🔴' : '⚪'}</span>
+      <div class="flex-1">
+        <p class="text-sm font-bold text-gray-900">${v.name}</p>
+        <p class="text-xs text-gray-500">${v.address}</p>
+        ${v.rating ? `<p class="text-xs text-yellow-600">⭐ ${v.rating}</p>` : ''}
+        ${v.open === true ? '<p class="text-xs text-green-600 font-semibold">Ouvert maintenant</p>' : v.open === false ? '<p class="text-xs text-red-600">Fermé</p>' : ''}
+      </div>
+      <a href="https://www.google.com/maps/dir/${userLat},${userLng}/${v.lat},${v.lng}" target="_blank"
+        class="text-xs bg-blue-600 text-white font-semibold px-3 py-1.5 rounded-xl whitespace-nowrap">
+        Y aller
+      </a>
+    </div>`).join('');
+}
+
+function openGoogleMapsExternal() {
+  const lat = STATE.userLat||48.8566, lng = STATE.userLng||2.3522;
+  window.open(`https://www.google.com/maps/search/vétérinaire+urgence+garde/@${lat},${lng},14z`, '_blank');
+}
+
+// ─── LÉGAL ────────────────────────────────────────────────────
+const LEGAL = {
+  mentions: `<h2>Mentions légales</h2>
+    <p><strong>Éditeur :</strong> [VOTRE SOCIÉTÉ]<br/>SIRET : [VOTRE SIRET]<br/>Adresse : [VOTRE ADRESSE]<br/>Email : contact@veturgence.fr<br/>Directeur de publication : [VOTRE NOM]</p>
+    <h2>Hébergement</h2><p>Vercel Inc. – 340 Pine Street, San Francisco, CA 94104, USA</p>
+    <h2>Propriété intellectuelle</h2><p>Tout le contenu est protégé par le droit d'auteur. Reproduction interdite sans autorisation.</p>
+    <h2>Responsabilité</h2><p>VetUrgence+ est un outil d'aide à la décision. Il ne remplace pas un avis vétérinaire professionnel.</p>`,
+  cgv: `<h2>Conditions Générales de Vente</h2>
+    <p><strong>Vendeur :</strong> [VOTRE SOCIÉTÉ] – SIRET [SIRET] – [ADRESSE]</p>
+    <h2>Tarifs</h2><ul><li>SOS Instant : 4,99€ par analyse</li><li>SOS Localisation : 4,99€ par analyse</li><li>Premium : 9,99€/mois</li><li>Annuel : 59,88€/an</li></ul>
+    <h2>Paiement</h2><p>Paiements sécurisés par Stripe. Prix TTC en euros. Aucune donnée bancaire stockée.</p>
+    <h2>Droit de rétractation</h2><p>Conformément à l'article L221-28 du Code de la consommation, le droit de rétractation ne s'applique pas aux contenus numériques fournis immédiatement.</p>
+    <h2>Résiliation</h2><p>Abonnements résiliables à tout moment via contact@veturgence.fr. Effet à la fin de la période en cours.</p>`,
+  cgu: `<h2>Conditions Générales d'Utilisation</h2>
+    <p>L'utilisation de VetUrgence+ implique l'acceptation des présentes CGU.</p>
+    <h2>Service</h2><p>VetUrgence+ fournit des analyses indicatives basées sur l'IA. <strong>Ce service ne constitue pas un diagnostic vétérinaire.</strong></p>
+    <h2>Obligations</h2><ul><li>Fournir des informations sincères</li><li>Ne pas détourner le service</li><li>Ne pas contourner les paiements</li></ul>
+    <h2>Responsabilité</h2><p>VetUrgence+ décline toute responsabilité pour les décisions prises sur la base des analyses fournies.</p>`,
+  rgpd: `<h2>Politique de confidentialité</h2>
+    <p>Conformément au RGPD du 25 mai 2018.</p>
+    <h2>Responsable du traitement</h2><p>[VOTRE SOCIÉTÉ] – contact@veturgence.fr</p>
+    <h2>Données collectées</h2><ul><li>Données de paiement (traitées par Stripe uniquement)</li><li>Symptômes décrits (traitement immédiat, non conservés)</li><li>Localisation GPS (avec consentement explicite)</li></ul>
+    <h2>Vos droits</h2><p>Accès, rectification, effacement, portabilité, opposition : contact@veturgence.fr</p>
+    <h2>Cookies</h2><p>Uniquement des cookies techniques nécessaires au fonctionnement. Aucun cookie publicitaire.</p>`
+};
+
+function openLegal(tab) { switchTab(tab); document.getElementById('modal-legal').classList.add('active'); }
+function switchTab(tab) {
+  ['mentions','cgv','cgu','rgpd'].forEach(t => {
+    const b = document.getElementById(`tab-${t}`);
+    if(b) { b.classList.remove('active'); b.style.background=''; b.style.color=''; }
+  });
+  const a = document.getElementById(`tab-${tab}`);
+  if(a) { a.classList.add('active'); a.style.background='#7f1d1d'; a.style.color='white'; }
+  document.getElementById('legal-content').innerHTML = LEGAL[tab]||'';
+}
+
+// ─── CONTACT ──────────────────────────────────────────────────
+function openContact() { document.getElementById('modal-contact').classList.add('active'); }
+function sendContact() {
+  const nom = document.getElementById('contact-nom').value.trim();
+  const email = document.getElementById('contact-email').value.trim();
+  const sujet = document.getElementById('contact-sujet').value;
+  const message = document.getElementById('contact-message').value.trim();
+  if(!nom||!email||!message) { alert('Veuillez remplir tous les champs.'); return; }
+  window.location.href = `mailto:contact@veturgence.fr?subject=${encodeURIComponent(sujet||'Contact VetUrgence+')}&body=${encodeURIComponent(`Nom: ${nom}\nEmail: ${email}\n\n${message}`)}`;
+  closeModal('modal-contact');
+}
+</script>
+
 </body>
 </html>
