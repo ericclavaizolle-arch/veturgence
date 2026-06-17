@@ -11,21 +11,24 @@ export default async function handler(req, res) {
         model: "mistral-small-latest",
         messages: [{ 
           role: "user", 
-          content: `Triage vétérinaire pour un(e) ${animal.toUpperCase()}. Symptômes : "${symptoms}".
-          RÈGLES :
-          1. Commence TOUJOURS ton conseil final (champ "advice") par : "🐾 Vous avez sélectionné : ${animal}. "
-          2. Analyse basée uniquement sur un(e) ${animal}.
-          3. JAMAIS de médicaments ou d'injections.
-          4. Uniquement des gestes de premier secours non invasifs.
-          Réponds UNIQUEMENT en JSON :
-          {
-            "urgency": "high"|"medium"|"low",
-            "urgency_label": "ÉLEVÉ"|"MODÉRÉ"|"FAIBLE",
-            "suspicions": ["suspicion 1", "suspicion 2"],
-            "gestes": ["geste 1", "geste 2"],
-            "protocole": "conduite à tenir",
-            "advice": "conseil final commençant par le rappel de l'animal sélectionné"
-          }`
+          content: `Triage vétérinaire. Case cochée : ${animal}. Texte utilisateur : "${symptoms}".
+
+RÈGLES IMPORTANTES :
+1. Si le texte parle d'un animal DIFFÉRENT de "${animal}", commence le champ "advice" par : "⚠️ Attention : vous avez sélectionné ${animal} mais votre texte parle d'un autre animal. Cette analyse concerne un ${animal}. "
+2. Sinon, commence le champ "advice" par : "🐾 Vous avez sélectionné : ${animal}. "
+3. Analyse basée UNIQUEMENT sur un ${animal}.
+4. JAMAIS de médicaments ou d'injections.
+5. Uniquement des gestes de premier secours non invasifs.
+
+Réponds UNIQUEMENT en JSON :
+{
+  "urgency": "high"|"medium"|"low",
+  "urgency_label": "ÉLEVÉ"|"MODÉRÉ"|"FAIBLE",
+  "suspicions": ["suspicion 1", "suspicion 2"],
+  "gestes": ["geste 1", "geste 2"],
+  "protocole": "conduite à tenir",
+  "advice": "conseil final"
+}`
         }],
         response_format: { type: "json_object" }
       })
