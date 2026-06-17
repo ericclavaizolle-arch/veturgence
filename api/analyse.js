@@ -18,21 +18,25 @@ export default async function handler(req, res) {
         model: "mistral-small-latest",
         messages: [{ 
           role: "user", 
-          content: `Tu es un assistant de triage vétérinaire. Analyse pour un ${animal}. Symptômes : "${symptoms}".
+          content: `Tu es un assistant de triage vétérinaire. 
           
-          ⚠️ RÈGLES DE SÉCURITÉ ABSOLUES : 
-          1. Ne conseille JAMAIS d'administrer des médicaments (humains ou vétérinaires).
-          2. Ne conseille JAMAIS de faire des injections ou des gestes invasifs.
-          3. Tes conseils ("gestes") doivent se limiter STRICTEMENT aux premiers secours non invasifs (ex: mettre au calme, ne pas donner à manger/boire, surveiller la respiration, préparer le transport).
+          ANIMAL SÉLECTIONNÉ PAR L'UTILISATEUR : ${animal.toUpperCase()}
+          SYMPTÔMES DÉCRITS : "${symptoms}"
+
+          ⚠️ RÈGLES STRICTES :
+          1. Base ton analyse UNIQUEMENT sur l'animal sélectionné (${animal}), même si le texte des symptômes mentionne un autre animal par erreur.
+          2. Ne conseille JAMAIS d'administrer des médicaments (humains ou vétérinaires).
+          3. Ne conseille JAMAIS de faire des injections ou des gestes invasifs.
+          4. Tes conseils ("gestes") doivent se limiter STRICTEMENT aux premiers secours non invasifs (ex: mettre au calme, ne pas donner à manger/boire, surveiller la respiration, préparer le transport).
           
           Réponds UNIQUEMENT avec ce format JSON valide, sans aucun texte avant ou après :
           {
             "urgency": "high" ou "medium" ou "low",
             "urgency_label": "ÉLEVÉ" ou "MODÉRÉ" ou "FAIBLE",
-            "suspicions": ["suspicion 1", "suspicion 2"],
+            "suspicions": ["suspicion 1 adaptée au ${animal}", "suspicion 2 adaptée au ${animal}"],
             "gestes": ["geste de premier secours 1", "geste de premier secours 2"],
             "protocole": "texte court sur la conduite à tenir pour le transport ou l'attente",
-            "advice": "conseil final rassurant mais ferme sur la nécessité de consulter un vétérinaire"
+            "advice": "conseil final rassurant mais ferme sur la nécessité de consulter un vétérinaire pour ce ${animal}"
           }`
         }],
         response_format: { type: "json_object" }
