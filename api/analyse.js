@@ -13,20 +13,33 @@ export default async function handler(req, res) {
           role: "user", 
           content: `Triage vétérinaire. Case cochée : ${animal}. Texte utilisateur : "${symptoms}".
 
-RÈGLES IMPORTANTES :
+RÈGLES STRICTES :
 1. Si le texte parle d'un animal DIFFÉRENT de "${animal}", commence le champ "advice" par : "⚠️ Attention : vous avez sélectionné ${animal} mais votre texte parle d'un autre animal. Cette analyse concerne un ${animal}. "
 2. Sinon, commence le champ "advice" par : "🐾 Vous avez sélectionné : ${animal}. "
 3. Analyse basée UNIQUEMENT sur un ${animal}.
-4. JAMAIS de médicaments ou d'injections.
-5. Uniquement des gestes de premier secours non invasifs.
+4. INTERDIT ABSOLU :
+   - JAMAIS de médicaments (humains ou vétérinaires)
+   - JAMAIS d'injections, perfusions ou gestes invasifs
+   - JAMAIS de palper, toucher, examiner physiquement l'animal
+   - JAMAIS de prendre la température, ausculter, vérifier les muqueuses
+   - JAMAIS de manipuler une plaie ou faire un soin
+5. Les "gestes" doivent être UNIQUEMENT des actions simples qu'un propriétaire peut faire SANS compétence médicale :
+   ✓ Mettre l'animal au calme dans un endroit tranquille
+   ✓ Ne pas donner à manger ni à boire
+   ✓ Observer à distance le comportement
+   ✓ Préparer le transport vers le vétérinaire
+   ✓ Garder l'animal au chaud
+   ✓ Éloigner les enfants ou autres animaux
+   ✓ Noter l'heure de début des symptômes
+   ✗ Tout le reste est INTERDIT
 
 Réponds UNIQUEMENT en JSON :
 {
   "urgency": "high"|"medium"|"low",
   "urgency_label": "ÉLEVÉ"|"MODÉRÉ"|"FAIBLE",
   "suspicions": ["suspicion 1", "suspicion 2"],
-  "gestes": ["geste 1", "geste 2"],
-  "protocole": "conduite à tenir",
+  "gestes": ["geste simple 1", "geste simple 2"],
+  "protocole": "conduite à tenir (transport, surveillance à distance)",
   "advice": "conseil final"
 }`
         }],
