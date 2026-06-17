@@ -19,24 +19,23 @@ export default async function handler(req, res) {
         messages: [{ 
           role: "user", 
           content: `Tu es un assistant de triage vétérinaire. 
-          
-          ANIMAL SÉLECTIONNÉ PAR L'UTILISATEUR : ${animal.toUpperCase()}
+          ANIMAL SÉLECTIONNÉ : ${animal.toUpperCase()}
           SYMPTÔMES DÉCRITS : "${symptoms}"
 
-          ⚠️ RÈGLES STRICTES :
-          1. Base ton analyse UNIQUEMENT sur l'animal sélectionné (${animal}), même si le texte des symptômes mentionne un autre animal par erreur.
-          2. Ne conseille JAMAIS d'administrer des médicaments (humains ou vétérinaires).
-          3. Ne conseille JAMAIS de faire des injections ou des gestes invasifs.
-          4. Tes conseils ("gestes") doivent se limiter STRICTEMENT aux premiers secours non invasifs (ex: mettre au calme, ne pas donner à manger/boire, surveiller la respiration, préparer le transport).
-          
-          Réponds UNIQUEMENT avec ce format JSON valide, sans aucun texte avant ou après :
+          RÈGLES STRICTES :
+          1. Si le texte mentionne un animal différent de "${animal}", tu DOIS commencer ton conseil final par : "⚠️ Attention : vous avez sélectionné ${animal}, mais votre texte mentionne un autre animal. Cette analyse est faite pour un ${animal}."
+          2. Base l'analyse médicale UNIQUEMENT sur un ${animal}.
+          3. JAMAIS de médicaments ou d'injections.
+          4. Uniquement des gestes de premier secours non invasifs.
+
+          Réponds UNIQUEMENT avec ce format JSON valide :
           {
             "urgency": "high" ou "medium" ou "low",
             "urgency_label": "ÉLEVÉ" ou "MODÉRÉ" ou "FAIBLE",
-            "suspicions": ["suspicion 1 adaptée au ${animal}", "suspicion 2 adaptée au ${animal}"],
-            "gestes": ["geste de premier secours 1", "geste de premier secours 2"],
-            "protocole": "texte court sur la conduite à tenir pour le transport ou l'attente",
-            "advice": "conseil final rassurant mais ferme sur la nécessité de consulter un vétérinaire pour ce ${animal}"
+            "suspicions": ["suspicion 1", "suspicion 2"],
+            "gestes": ["geste 1", "geste 2"],
+            "protocole": "conduite à tenir",
+            "advice": "conseil final (incluant l'avertissement si besoin)"
           }`
         }],
         response_format: { type: "json_object" }
