@@ -52,10 +52,8 @@
         <div class="flex items-center gap-3 text-sm text-gray-700"><span class="text-green-600 font-bold text-base">✓</span> Être rassuré en moins de 30 secondes</div>
       </div>
 
-      <button onclick="openAnalyseModal()" class="w-full bg-red-800 hover:bg-red-900 text-white font-bold py-4 rounded-2xl text-base transition-all mb-2">
-  Évaluer l'urgence gratuitement →
-</button>
-      <p class="text-xs text-center text-gray-400 mb-5">Gratuit · Sans inscription · Résultat immédiat</p>
+      <button onclick="openAnalyseModal()" class="w-full bg-red-800 hover:bg-red-900 text-white font-bold py-4 rounded-2xl text-base transition-all mb-2">Évaluer l'urgence gratuitement →</button>
+      <p class="text-xs text-center text-gray-400 mb-5">Analyse d'urgence gratuite · Sans inscription · Résultat immédiat</p>
 
       <div class="bg-gray-100 rounded-2xl p-4 mb-6">
         <p class="text-xs font-bold text-gray-600 mb-1">ℹ️ Information importante</p>
@@ -67,13 +65,13 @@
         <div class="plan-card border-2 border-gray-200 rounded-2xl p-3" data-plan="instant" onclick="selectPlan(this)">
           <p class="text-xs font-semibold text-gray-600 mb-1">SOS Instant</p>
           <p class="text-xl font-black text-red-800">2,99€</p>
-          <p class="text-xs text-gray-400 mt-1">Rapport complet</p>
+          <p class="text-xs text-gray-400 mt-1">Diagnostic seul</p>
         </div>
         <div class="plan-card border-2 border-red-800 rounded-2xl p-3 relative selected" data-plan="localisation" onclick="selectPlan(this)">
           <span class="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-red-800 text-white text-xs font-bold px-2 py-0.5 rounded-full whitespace-nowrap">⭐ Recommandé</span>
           <p class="text-xs font-semibold text-gray-600 mb-1">SOS + GPS</p>
           <p class="text-xl font-black text-red-800">4,99€</p>
-          <p class="text-xs text-gray-400 mt-1">+ Vétérinaires GPS</p>
+          <p class="text-xs text-gray-400 mt-1">Diagnostic + Vétérinaires</p>
         </div>
         <div class="plan-card border-2 border-gray-200 rounded-2xl p-3" data-plan="premium" onclick="selectPlan(this)">
           <p class="text-xs font-semibold text-gray-600 mb-1">Premium</p>
@@ -87,8 +85,8 @@
         </div>
       </div>
 
-           <div class="bg-red-50 border border-red-100 rounded-2xl p-4 mb-6">
-        <p class="text-xs font-bold text-red-800 mb-2">✨ VetUrgence+ Premium inclut:mensuel/annuel</p>
+      <div class="bg-red-50 border border-red-100 rounded-2xl p-4 mb-6">
+        <p class="text-xs font-bold text-red-800 mb-2">✨ VetUrgence+ Premium inclut :</p>
         <div class="space-y-1">
           <p class="text-xs text-gray-600">✓ Analyses illimitées 24h/24</p>
           <p class="text-xs text-gray-600">✓ Localisation des vétérinaires de garde</p>
@@ -98,19 +96,20 @@
 
       <div class="border-t border-gray-100 pt-4">
         <div class="flex flex-wrap justify-center gap-x-3 gap-y-1 mb-2">
+          <a href="blog.html" class="text-xs text-gray-400 hover:text-red-800 underline">Blog</a>
           <button onclick="openLegal('mentions')" class="text-xs text-gray-400 hover:text-red-800 underline">Mentions légales</button>
           <button onclick="openLegal('cgv')" class="text-xs text-gray-400 hover:text-red-800 underline">CGV</button>
           <button onclick="openLegal('cgu')" class="text-xs text-gray-400 hover:text-red-800 underline">CGU</button>
           <button onclick="openLegal('rgpd')" class="text-xs text-gray-400 hover:text-red-800 underline">RGPD</button>
           <button onclick="openContact()" class="text-xs text-gray-400 hover:text-red-800 underline">Contact</button>
         </div>
-        <p class="text-xs text-gray-300 text-center">© 2026 VetUrgence+ · Tous droits réservés</p>
+        <p class="text-xs text-gray-300 text-center">© 2025 VetUrgence+ · Tous droits réservés</p>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ==================== MODALES (Analyse, Urgence, Paiement, Rapport, Maps, Légal, Contact) ==================== -->
+<!-- ==================== MODALES ==================== -->
 <div id="modal-analyse" class="modal fixed inset-0 bg-black bg-opacity-60 justify-center items-center p-4 z-50">
   <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative shadow-2xl">
     <button onclick="closeModal('modal-analyse')" class="absolute top-4 right-4 text-gray-400 text-xl font-bold">×</button>
@@ -236,19 +235,17 @@
 
 <!-- ==================== JAVASCRIPT ==================== -->
 <script>
-// 1. CONFIGURATION (Toujours en premier)
 const CONFIG = {
-  STRIPE_PUBLIC_KEY: 'pk_test_51TjEUxLsuTeO0gPf9XEzZh7brQLNqErYAVPkC3PiEcogrJ0myfxGRpZSKoqPDrszWnesqgC7Km7bGhWcW96R49if00t6Lx2EXI', 
+  STRIPE_PUBLIC_KEY: 'pk_test_TA_CLE_ICI',
 };
 
-// 2. LISTE DES PLANS
 const PLANS = {
   instant:      { price: 2.99,  label: 'SOS Instant – 2,99€',       hasMaps: false },
   localisation: { price: 4.99,  label: 'SOS + GPS – 4,99€',         hasMaps: true  },
   premium:      { price: 9.99,  label: 'Premium – 9,99€/mois',      hasMaps: true  },
-  annuel:       { price: 59.88, label: 'Annuel – 59,00€/an',        hasMaps: true  },
+  annuel:       { price: 59.88, label: 'Annuel – 59,88€/an',        hasMaps: true  },
 };
-// 3. ÉTAT DE L'APPLICATION (Déclaré avant toute utilisation)
+
 const STATE = {
   animal: 'Chien',
   plan: 'localisation',
@@ -260,7 +257,6 @@ const STATE = {
   userLng: null,
 };
 
-// 4. INITIALISATION STRIPE
 (function(){
   const s = document.createElement('script');
   s.src = 'https://js.stripe.com/v3/';
@@ -268,7 +264,6 @@ const STATE = {
   document.head.appendChild(s);
 })();
 
-// 5. FONCTIONS DE L'APPLICATION
 function selectPlan(card) {
   document.querySelectorAll('.plan-card').forEach(c => {
     c.classList.remove('selected');
@@ -325,13 +320,16 @@ async function lancerAnalyseGratuite() {
 
 function afficherUrgence(data) {
   const cfg = {
-    high:   { bg:'bg-red-600',    icon:'🚨', label:'ÉLEVÉ',   sub:'Consultez un vétérinaire immédiatement' },
-    medium: { bg:'bg-orange-500', icon:'⚠️', label:'MODÉRÉ',  sub:'Consultez dans les heures qui viennent' },
-    low:    { bg:'bg-green-600',  icon:'ℹ️', label:'FAIBLE',  sub:'Surveillance conseillée sous 24h' },
+    high: { bg:'bg-red-600', icon:'🚨', label:'ÉLEVÉ', sub:'Consultez un vétérinaire immédiatement' },
+    medium: { bg:'bg-orange-500', icon:'⚠️', label:'MODÉRÉ', sub:'Consultez dans les heures qui viennent' },
+    low: { bg:'bg-green-600', icon:'ℹ️', label:'FAIBLE', sub:'Surveillance conseillée sous 24h' },
   }[data.urgency] || { bg:'bg-orange-500', icon:'⚠️', label:'MODÉRÉ', sub:'Consultez votre vétérinaire' };
 
+  const alerte = data.warning ? `<div class="bg-yellow-100 border border-yellow-400 text-yellow-800 rounded-xl p-3 mb-4 text-sm font-bold flex items-start gap-2"><span class="text-lg">⚠️</span><span>${data.warning}</span></div>` : '';
+
   document.getElementById('urgence-header').innerHTML = `
-    <div class="${cfg.bg} rounded-2xl p-4 text-white text-center urgency-pulse mb-4">
+    ${alerte}
+    <div class="${cfg.bg} rounded-2xl p-4 text-white text-center urgency-pulse">
       <div class="text-3xl mb-1">${cfg.icon}</div>
       <p class="text-xs font-semibold opacity-80 uppercase tracking-wider mb-1">Niveau d'urgence</p>
       <p class="text-2xl font-black">${cfg.label}</p>
@@ -386,20 +384,6 @@ async function confirmCard() {
   const btn = document.getElementById('btn-confirm-card');
   btn.textContent = 'Traitement…'; btn.disabled = true;
   try {
-    // En production, décommente les lignes ci-dessous et crée le fichier api/payment.js
-    /*
-    const res = await fetch('/api/payment', {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ amount: PLANS[STATE.plan].price, currency:'eur' })
-    });
-    const { clientSecret } = await res.json();
-    const { error } = await STATE.stripe.confirmCardPayment(clientSecret, {
-      payment_method:{ card: STATE.cardElement }
-    });
-    if(error) throw error;
-    */
-    
-    // Mode démo pour tester l'interface
     await new Promise(r=>setTimeout(r,1200));
     onPaymentSuccess();
   } catch(err) {
@@ -432,14 +416,17 @@ async function onPaymentSuccess() {
 
 function afficherRapport(json) {
   const u = {
-    high:   { bg:'bg-red-50',    border:'border-red-200',    text:'text-red-800',    icon:'🚨' },
+    high: { bg:'bg-red-50', border:'border-red-200', text:'text-red-800', icon:'🚨' },
     medium: { bg:'bg-yellow-50', border:'border-yellow-200', text:'text-yellow-800', icon:'⚠️' },
-    low:    { bg:'bg-green-50',  border:'border-green-200',  text:'text-green-800',  icon:'ℹ️' },
+    low: { bg:'bg-green-50', border:'border-green-200', text:'text-green-800', icon:'ℹ️' },
   }[json.urgency] || { bg:'bg-yellow-50', border:'border-yellow-200', text:'text-yellow-800', icon:'⚠️' };
 
   const li = arr => (arr||[]).map(x => `<li class="flex items-start gap-2 text-sm text-gray-700"><span class="text-red-800 font-bold mt-0.5">→</span>${x}</li>`).join('');
+  
+  const alerte = json.warning ? `<div class="bg-yellow-100 border border-yellow-400 text-yellow-800 rounded-xl p-3 mb-4 text-sm font-bold flex items-start gap-2"><span class="text-lg">⚠️</span><span>${json.warning}</span></div>` : '';
 
   let html = `
+    ${alerte}
     <div class="${u.bg} border ${u.border} rounded-2xl p-3 flex items-center gap-2 mb-4">
       <span class="text-xl">${u.icon}</span>
       <span class="font-bold text-sm ${u.text}">${json.urgency_label}</span>
@@ -461,10 +448,9 @@ function afficherRapport(json) {
       <p class="text-sm text-gray-600 leading-relaxed">${json.advice}</p>
     </div>`;
 
-  if(STATE.hasMaps) {
-    html += `<button onclick="openMapsModal()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 mb-2">📍 Trouver un vétérinaire ouvert maintenant</button>`;
-  }
+  if(STATE.hasMaps) html += `<button onclick="openMapsModal()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 mb-2">📍 Trouver un vétérinaire ouvert maintenant</button>`;
   html += `<button onclick="closeModal('modal-rapport')" class="w-full border border-red-800 text-red-800 font-semibold py-3 rounded-xl text-sm">Fermer</button>`;
+  
   document.getElementById('rapport-content').innerHTML = html;
   document.getElementById('modal-rapport').classList.add('active');
 }
@@ -524,7 +510,7 @@ function openGoogleMapsExternal() {
 
 const LEGAL = {
   mentions: `<h2>Mentions légales</h2><p><strong>Éditeur :</strong> [VOTRE SOCIÉTÉ]<br/>SIRET : [VOTRE SIRET]<br/>Adresse : [VOTRE ADRESSE]<br/>Email : contact@veturgence.fr<br/>Directeur de publication : [VOTRE NOM]</p><h2>Hébergement</h2><p>Vercel Inc. – 340 Pine Street, San Francisco, CA 94104, USA</p><h2>Propriété intellectuelle</h2><p>Tout le contenu est protégé par le droit d'auteur. Reproduction interdite sans autorisation.</p><h2>Responsabilité</h2><p>VetUrgence+ est un outil d'aide à la décision. Il ne remplace pas un avis vétérinaire professionnel.</p>`,
-  cgv: `<h2>Conditions Générales de Vente</h2><p><strong>Vendeur :</strong> [VOTRE SOCIÉTÉ] – SIRET [SIRET] – [ADRESSE]</p><h2>Tarifs</h2><ul><li>SOS Instant : 4,99€ par analyse</li><li>SOS Localisation : 4,99€ par analyse</li><li>Premium : 9,99€/mois</li><li>Annuel : 59,88€/an</li></ul><h2>Paiement</h2><p>Paiements sécurisés par Stripe. Prix TTC en euros. Aucune donnée bancaire stockée.</p><h2>Droit de rétractation</h2><p>Conformément à l'article L221-28 du Code de la consommation, le droit de rétractation ne s'applique pas aux contenus numériques fournis immédiatement.</p><h2>Résiliation</h2><p>Abonnements résiliables à tout moment via contact@veturgence.fr. Effet à la fin de la période en cours.</p>`,
+  cgv: `<h2>Conditions Générales de Vente</h2><p><strong>Vendeur :</strong> [VOTRE SOCIÉTÉ] – SIRET [SIRET] – [ADRESSE]</p><h2>Tarifs</h2><ul><li>SOS Instant : 2,99€ par analyse</li><li>SOS Localisation : 4,99€ par analyse</li><li>Premium : 9,99€/mois</li><li>Annuel : 59,88€/an</li></ul><h2>Paiement</h2><p>Paiements sécurisés par Stripe. Prix TTC en euros. Aucune donnée bancaire stockée.</p><h2>Droit de rétractation</h2><p>Conformément à l'article L221-28 du Code de la consommation, le droit de rétractation ne s'applique pas aux contenus numériques fournis immédiatement.</p><h2>Résiliation</h2><p>Abonnements résiliables à tout moment via contact@veturgence.fr. Effet à la fin de la période en cours.</p>`,
   cgu: `<h2>Conditions Générales d'Utilisation</h2><p>L'utilisation de VetUrgence+ implique l'acceptation des présentes CGU.</p><h2>Service</h2><p>VetUrgence+ fournit des analyses indicatives basées sur l'IA. <strong>Ce service ne constitue pas un diagnostic vétérinaire.</strong></p><h2>Obligations</h2><ul><li>Fournir des informations sincères</li><li>Ne pas détourner le service</li><li>Ne pas contourner les paiements</li></ul><h2>Responsabilité</h2><p>VetUrgence+ décline toute responsabilité pour les décisions prises sur la base des analyses fournies.</p>`,
   rgpd: `<h2>Politique de confidentialité</h2><p>Conformément au RGPD du 25 mai 2018.</p><h2>Responsable du traitement</h2><p>[VOTRE SOCIÉTÉ] – contact@veturgence.fr</p><h2>Données collectées</h2><ul><li>Données de paiement (traitées par Stripe uniquement)</li><li>Symptômes décrits (traitement immédiat, non conservés)</li><li>Localisation GPS (avec consentement explicite)</li></ul><h2>Vos droits</h2><p>Accès, rectification, effacement, portabilité, opposition : contact@veturgence.fr</p><h2>Cookies</h2><p>Uniquement des cookies techniques nécessaires au fonctionnement. Aucun cookie publicitaire.</p>`
 };
