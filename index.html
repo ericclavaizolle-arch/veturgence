@@ -26,7 +26,6 @@
 </head>
 <body class="bg-gray-50 min-h-screen">
 
-<!-- ==================== PAGE PRINCIPALE ==================== -->
 <div class="min-h-screen flex flex-col justify-center items-center p-4">
   <div class="bg-white rounded-3xl shadow-xl max-w-sm w-full border border-gray-100 overflow-hidden">
     <div class="bg-red-800 px-8 pt-8 pb-6 text-center">
@@ -86,7 +85,7 @@
       </div>
 
       <div class="bg-red-50 border border-red-100 rounded-2xl p-4 mb-6">
-        <p class="text-xs font-bold text-red-800 mb-2">✨ VetUrgence+ Premium inclut:mensuel/annuel </p>
+        <p class="text-xs font-bold text-red-800 mb-2">✨ VetUrgence+ Premium inclut :</p>
         <div class="space-y-1">
           <p class="text-xs text-gray-600">✓ Analyses illimitées 24h/24</p>
           <p class="text-xs text-gray-600">✓ Localisation des vétérinaires de garde</p>
@@ -109,7 +108,6 @@
   </div>
 </div>
 
-<!-- ==================== MODALES ==================== -->
 <div id="modal-analyse" class="modal fixed inset-0 bg-black bg-opacity-60 justify-center items-center p-4 z-50">
   <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative shadow-2xl">
     <button onclick="closeModal('modal-analyse')" class="absolute top-4 right-4 text-gray-400 text-xl font-bold">×</button>
@@ -183,16 +181,6 @@
   </div>
 </div>
 
-<div id="modal-maps" class="modal fixed inset-0 bg-black bg-opacity-60 justify-center items-center p-4 z-50">
-  <div class="bg-white rounded-3xl max-w-sm w-full p-6 relative shadow-2xl">
-    <button onclick="closeModal('modal-maps')" class="absolute top-4 right-4 text-gray-400 text-xl font-bold">×</button>
-    <h3 class="text-lg font-bold text-gray-900 mb-2">📍 Vétérinaires proches</h3>
-    <p class="text-xs text-gray-500 mb-3" id="maps-status">Localisation en cours…</p>
-    <div id="map" class="w-full rounded-2xl mb-4" style="height:240px; background:#f1f5f9;"></div>
-    <button onclick="openGoogleMapsExternal()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2">📍 Ouvrir dans Google Maps</button>
-  </div>
-</div>
-
 <div id="modal-legal" class="modal fixed inset-0 bg-black bg-opacity-60 justify-center items-start p-4 z-50 overflow-y-auto">
   <div class="bg-white rounded-3xl max-w-sm w-full relative shadow-2xl my-4">
     <div class="sticky top-0 bg-white rounded-t-3xl p-4 border-b border-gray-100 z-10">
@@ -233,7 +221,6 @@
   </div>
 </div>
 
-<!-- ==================== JAVASCRIPT ==================== -->
 <script>
 const CONFIG = {
   STRIPE_PUBLIC_KEY: 'pk_test_TA_CLE_ICI',
@@ -448,102 +435,11 @@ function afficherRapport(json) {
       <p class="text-sm text-gray-600 leading-relaxed">${json.advice}</p>
     </div>`;
 
-  if(STATE.hasMaps) html += `<button onclick="openMapsModal()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 mb-2">📍 Trouver un vétérinaire ouvert maintenant</button>`;
+  if(STATE.hasMaps) html += `<button onclick="openGoogleMapsExternal()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 mb-2">📍 Trouver un vétérinaire ouvert maintenant</button>`;
   html += `<button onclick="closeModal('modal-rapport')" class="w-full border border-red-800 text-red-800 font-semibold py-3 rounded-xl text-sm">Fermer</button>`;
   
   document.getElementById('rapport-content').innerHTML = html;
   document.getElementById('modal-rapport').classList.add('active');
-}
-function openMapsModal() {
-  closeModal('modal-rapport');
-  document.getElementById('modal-maps').classList.add('active');
-  document.getElementById('maps-status').textContent = 'Localisation en cours…';
-  
-  if(navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(
-      pos => {
-        STATE.userLat = pos.coords.latitude;
-        STATE.userLng = pos.coords.longitude;
-        chargerVets(STATE.userLat, STATE.userLng);
-      },
-      () => {
-        document.getElementById('maps-status').innerHTML = `
-          <div class="space-y-2">
-            <p>📍 Localisation automatique indisponible</p>
-            <input type="text" id="ville-manuelle" placeholder="Entrez votre ville (ex: Pattaya, Bangkok...)" 
-              class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
-            <button onclick="chercherVilleManuelle()" class="w-full bg-blue-600 text-white font-bold py-2 rounded-lg text-sm">
-              Rechercher
-            </button>
-          </div>
-        `;
-      }
-    );
-  } else {
-    document.getElementById('maps-status').innerHTML = `
-      <div class="space-y-2">
-        <p>📍 Votre navigateur ne supporte pas la géolocalisation</p>
-        <input type="text" id="ville-manuelle" placeholder="Entrez votre ville" 
-          class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm">
-        <button onclick="chercherVilleManuelle()" class="w-full bg-blue-600 text-white font-bold py-2 rounded-lg text-sm">
-          Rechercher
-        </button>
-      </div>
-    `;
-  }
-}
-
-async function chercherVilleManuelle() {
-  const ville = document.getElementById('ville-manuelle').value.trim();
-  if (!ville) {
-    alert('Veuillez entrer une ville');
-    return;
-  }
-  
-  document.getElementById('maps-status').textContent = 'Recherche de la ville...';
-  
-  try {
-    const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(ville)}`);
-    const data = await response.json();
-    
-    if (data.length > 0) {
-      STATE.userLat = parseFloat(data[0].lat);
-      STATE.userLng = parseFloat(data[0].lon);
-      chargerVets(STATE.userLat, STATE.userLng);
-    } else {
-      document.getElementById('maps-status').textContent = 'Ville introuvable. Réessayez.';
-    }
-  } catch (error) {
-    document.getElementById('maps-status').textContent = 'Erreur de recherche. Réessayez.';
-  }
-}
-
-
-async function chargerVets(lat, lng) {
-  STATE.userLat = lat; 
-  STATE.userLng = lng;
-  // Ouvre directement Google Maps avec les urgences vétérinaires
-  window.open(`https://www.google.com/maps/search/veterinary+24h+open/@${lat},${lng},14z`, '_blank');
-}
-}
-
-function afficherVets(vets, userLat, userLng) {
-  const mapEl = document.getElementById('map');
-  const statusEl = document.getElementById('maps-status');
-  if(!vets || vets.length === 0) { statusEl.textContent = 'Aucun vétérinaire trouvé à proximité.'; return; }
-  statusEl.textContent = `${vets.length} vétérinaire(s) trouvé(s) à proximité`;
-  mapEl.style.height = 'auto';
-  mapEl.innerHTML = vets.map(v => `
-    <div class="flex items-start gap-3 p-3 border-b border-gray-100 last:border-0">
-      <span class="text-xl mt-0.5">${v.open === true ? '🟢' : v.open === false ? '🔴' : '⚪'}</span>
-      <div class="flex-1">
-        <p class="text-sm font-bold text-gray-900">${v.name}</p>
-        <p class="text-xs text-gray-500">${v.address}</p>
-        ${v.rating ? `<p class="text-xs text-yellow-600">⭐ ${v.rating}</p>` : ''}
-        ${v.open === true ? '<p class="text-xs text-green-600 font-semibold">Ouvert maintenant</p>' : v.open === false ? '<p class="text-xs text-red-600">Fermé</p>' : ''}
-      </div>
-      <a href="https://www.google.com/maps/dir/${userLat},${userLng}/${v.lat},${v.lng}" target="_blank" class="text-xs bg-blue-600 text-white font-semibold px-3 py-1.5 rounded-xl whitespace-nowrap">Y aller</a>
-    </div>`).join('');
 }
 
 function openGoogleMapsExternal() {
@@ -554,23 +450,18 @@ function openGoogleMapsExternal() {
         const lng = pos.coords.longitude;
         STATE.userLat = lat;
         STATE.userLng = lng;
-        // "veterinary" est un mot international compris par Google Maps partout dans le monde
         window.open(`https://www.google.com/maps/search/veterinary+24h+open/@${lat},${lng},14z`, '_blank');
       },
       error => {
-        const ville = prompt('📍 Localisation refusée.\n\nEntrez votre ville pour trouver les urgences vétérinaires :', 'Paris');
+        const ville = prompt('📍 Localisation refusée.\n\nEntrez votre ville :', 'Paris');
         if (ville && ville.trim()) {
           chercherVilleEtOuvrirMaps(ville.trim());
         }
       },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 0
-      }
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
     );
   } else {
-    const ville = prompt('📍 Votre navigateur ne supporte pas la géolocalisation.\n\nEntrez votre ville :', 'Paris');
+    const ville = prompt('📍 Géolocalisation non supportée.\n\nEntrez votre ville :', 'Paris');
     if (ville && ville.trim()) {
       chercherVilleEtOuvrirMaps(ville.trim());
     }
@@ -581,7 +472,6 @@ async function chercherVilleEtOuvrirMaps(ville) {
   try {
     const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(ville)}`);
     const data = await response.json();
-    
     if (data.length > 0) {
       const lat = parseFloat(data[0].lat);
       const lng = parseFloat(data[0].lon);
@@ -589,12 +479,13 @@ async function chercherVilleEtOuvrirMaps(ville) {
       STATE.userLng = lng;
       window.open(`https://www.google.com/maps/search/veterinary+24h+open/@${lat},${lng},14z`, '_blank');
     } else {
-      alert('Ville introuvable. Veuillez réessayer.');
+      alert('Ville introuvable.');
     }
   } catch (error) {
     alert('Erreur de recherche.');
   }
 }
+
 const LEGAL = {
   mentions: `<h2>Mentions légales</h2><p><strong>Éditeur :</strong> [VOTRE SOCIÉTÉ]<br/>SIRET : [VOTRE SIRET]<br/>Adresse : [VOTRE ADRESSE]<br/>Email : contact@veturgence.fr<br/>Directeur de publication : [VOTRE NOM]</p><h2>Hébergement</h2><p>Vercel Inc. – 340 Pine Street, San Francisco, CA 94104, USA</p><h2>Propriété intellectuelle</h2><p>Tout le contenu est protégé par le droit d'auteur. Reproduction interdite sans autorisation.</p><h2>Responsabilité</h2><p>VetUrgence+ est un outil d'aide à la décision. Il ne remplace pas un avis vétérinaire professionnel.</p>`,
   cgv: `<h2>Conditions Générales de Vente</h2><p><strong>Vendeur :</strong> [VOTRE SOCIÉTÉ] – SIRET [SIRET] – [ADRESSE]</p><h2>Tarifs</h2><ul><li>SOS Instant : 2,99€ par analyse</li><li>SOS Localisation : 4,99€ par analyse</li><li>Premium : 9,99€/mois</li><li>Annuel : 59,88€/an</li></ul><h2>Paiement</h2><p>Paiements sécurisés par Stripe. Prix TTC en euros. Aucune donnée bancaire stockée.</p><h2>Droit de rétractation</h2><p>Conformément à l'article L221-28 du Code de la consommation, le droit de rétractation ne s'applique pas aux contenus numériques fournis immédiatement.</p><h2>Résiliation</h2><p>Abonnements résiliables à tout moment via contact@veturgence.fr. Effet à la fin de la période en cours.</p>`,
