@@ -520,19 +520,11 @@ async function chercherVilleManuelle() {
 
 
 async function chargerVets(lat, lng) {
-  STATE.userLat = lat; STATE.userLng = lng;
-  document.getElementById('maps-status').textContent = 'Recherche des vétérinaires…';
-  try {
-    const res = await fetch('/api/maps', {
-      method: 'POST', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ lat, lng }),
-    });
-    const data = await res.json();
-    if(data.error) throw new Error(data.error);
-    afficherVets(data.vets, lat, lng);
-  } catch(err) {
-    document.getElementById('maps-status').textContent = 'Impossible de charger les vétérinaires.';
-  }
+  STATE.userLat = lat; 
+  STATE.userLng = lng;
+  // Ouvre directement Google Maps avec les urgences vétérinaires
+  window.open(`https://www.google.com/maps/search/veterinary+24h+open/@${lat},${lng},14z`, '_blank');
+}
 }
 
 function afficherVets(vets, userLat, userLng) {
