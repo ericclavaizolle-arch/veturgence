@@ -449,8 +449,20 @@ function afficherRapport(json) {
   document.getElementById('modal-rapport').classList.add('active');
 }
 
+function ouvrirMaps(url) {
+  // Méthode universelle qui fonctionne partout (iOS, Android, Brave, Safari, Chrome)
+  const lien = document.createElement('a');
+  lien.href = url;
+  lien.target = '_blank';
+  lien.rel = 'noopener noreferrer';
+  lien.style.display = 'none';
+  document.body.appendChild(lien);
+  lien.click();
+  setTimeout(() => lien.remove(), 100);
+}
+
 function openGoogleMapsExternal() {
-  // Afficher un loader discret
+  // Afficher un loader
   const loader = document.createElement('div');
   loader.id = 'geo-loader';
   loader.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;justify-content:center;align-items:center;z-index:9999;';
@@ -459,124 +471,67 @@ function openGoogleMapsExternal() {
   
   let resolved = false;
   
-  // Timeout global de 8 secondes
-  const timeoutGlobal = setTimeout(() => {
+  // Timeout de sécurité 10 secondes
+  const timeout = setTimeout(() => {
     if (!resolved) {
       resolved = true;
       supprimerLoader();
-      // Fallback : ouvrir Maps avec la dernière ville connue ou Paris
-      const derniereVille = localStorage.getItem('derniereVille') || 'Paris';
-      window.open(`https://www.google.com/maps/search/veterinary+24h+open/${encodeURIComponent(derniereVille)}`, '_blank');
+      const ville = localStorage.getItem('derniereVille') || 'Paris';
+      ouvrirMaps(`https://www.google.com/maps/search/veterinary+24h+open/${encodeURIComponent(ville)}`);
     }
-  }, 8000);
+  }, 10000);
   
-  // Méthode 1 : getCurrentPosition (la plus fiable)
+  // Essayer la géolocalisation
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
       pos => {
         if (resolved) return;
         resolved = true;
-        clearTimeout(timeoutGlobal);
+        clearTimeout(timeout);
         supprimerLoader();
         const lat = pos.coords.latitude;
         const lng = pos.coords.longitude;
-        STATE.userLat = lat;
-        STATE.userLng = lng;
-        window.open(`https://www.google.com/maps/search/veterinary+24h+open/@${lat},${lng},14z`, '_blank');
+        ouvrirMaps(`https://www.google.com/maps/search/veterinary+24h+open/@${lat},${lng},14z`);
       },
-      error => {
-        // Méthode 2 : Si getCurrentPosition échoue, essayer watchPosition
+      () => {
         if (resolved) return;
-        essayerWatchPosition(timeoutGlobal);
+        resolved = true;
+        clearTimeout(timeout);
+        essayerGeolocIP();
       },
-      { 
-        enableHighAccuracy: true, 
-        timeout: 5000, 
-        maximumAge: 60000  // Accepte une position de moins d'1 minute (plus rapide)
-      }
+      { enableHighAccuracy: true, timeout: 8000, maximumAge: 60000 }
     );
   } else {
-    clearTimeout(timeoutGlobal);
-    supprimerLoader();
-    const derniereVille = localStorage.getItem('derniereVille') || 'Paris';
-    window.open(`https://www.google.com/maps/search/veterinary+24h+open/${encodeURIComponent(derniereVille)}`, '_blank');
+    clearTimeout(timeout);
+    essayerGeolocIP();
   }
 }
 
-function essayerWatchPosition(timeoutGlobal) {
-  let watchResolved = false;
+async function essayerGeolocIP() {
+  const loader = document.getElementById('geo-loader');
+  if (loader) {
+    loader.querySelector('p').textContent = 'Localisation approximative...';
+  }
   
-  // Timeout pour watchPosition : 3 secondes
-  const watchTimeout = setTimeout(() => {
-    if (!watchResolved) {
-      watchResolved = true;
-      if (watchId) navigator.geolocation.clearWatch(watchId);
-      // Fallback final : IP geolocation
-      essayerGeolocIP(timeoutGlobal);
-    }
-  }, 3000);
-  
-  const watchId = navigator.geolocation.watchPosition(
-    pos => {
-      if (watchResolved) return;
-      watchResolved = true;
-      clearTimeout(watchTimeout);
-      navigator.geolocation.clearWatch(watchId);
-      
-      // Vérifier que le timeout global n'a pas déjà expiré
-      const loader = document.getElementById('geo-loader');
-      if (!loader) return;
-      
-      clearTimeout(timeoutGlobal);
-      supprimerLoader();
-      const lat = pos.coords.latitude;
-      const lng = pos.coords.longitude;
-      STATE.userLat = lat;
-      STATE.userLng = lng;
-      window.open(`https://www.google.com/maps/search/veterinary+24h+open/@${lat},${lng},14z`, '_blank');
-    },
-    () => {
-      if (watchResolved) return;
-      watchResolved = true;
-      clearTimeout(watchTimeout);
-      essayerGeolocIP(timeoutGlobal);
-    },
-    { enableHighAccuracy: true, maximumAge: 60000 }
-  );
-}
-
-async function essayerGeolocIP(timeoutGlobal) {
   try {
     const res = await fetch('https://get.geojs.io/v1/ip.json');
     const data = await res.json();
     
-    const loader = document.getElementById('geo-loader');
-    if (!loader) return; // Timeout global déjà expiré
-    
-    clearTimeout(timeoutGlobal);
     supprimerLoader();
     
     if (data.latitude && data.longitude) {
-      const lat = parseFloat(data.latitude);
-      const lng = parseFloat(data.longitude);
-      STATE.userLat = lat;
-      STATE.userLng = lng;
-      window.open(`https://www.google.com/maps/search/veterinary+24h+open/@${lat},${lng},14z`, '_blank');
+      ouvrirMaps(`https://www.google.com/maps/search/veterinary+24h+open/@${data.latitude},${data.longitude},14z`);
     } else if (data.city) {
       localStorage.setItem('derniereVille', data.city);
-      window.open(`https://www.google.com/maps/search/veterinary+24h+open/${encodeURIComponent(data.city)}`, '_blank');
+      ouvrirMaps(`https://www.google.com/maps/search/veterinary+24h+open/${encodeURIComponent(data.city)}`);
     } else {
-      const derniereVille = localStorage.getItem('derniereVille') || 'Paris';
-      window.open(`https://www.google.com/maps/search/veterinary+24h+open/${encodeURIComponent(derniereVille)}`, '_blank');
+      const ville = localStorage.getItem('derniereVille') || 'Paris';
+      ouvrirMaps(`https://www.google.com/maps/search/veterinary+24h+open/${encodeURIComponent(ville)}`);
     }
   } catch (error) {
-    const loader = document.getElementById('geo-loader');
-    if (loader) {
-      clearTimeout(timeoutGlobal);
-      supprimerLoader();
-    }
-    const derniereVille = localStorage.getItem('derniereVille') || 'Paris';
-    window.open(`https://www.google.com/maps/search/veterinary+24h+open/${encodeURIComponent(derniereVille)}`, '_blank');
+    supprimerLoader();
+    const ville = localStorage.getItem('derniereVille') || 'Paris';
+    ouvrirMaps(`https://www.google.com/maps/search/veterinary+24h+open/${encodeURIComponent(ville)}`);
   }
 }
 
@@ -584,7 +539,6 @@ function supprimerLoader() {
   const loader = document.getElementById('geo-loader');
   if (loader) loader.remove();
 }
-
 const LEGAL = {
   mentions: `<h2>Mentions légales</h2><p><strong>Éditeur :</strong> [VOTRE SOCIÉTÉ]<br/>SIRET : [VOTRE SIRET]<br/>Adresse : [VOTRE ADRESSE]<br/>Email : contact@veturgence.fr<br/>Directeur de publication : [VOTRE NOM]</p><h2>Hébergement</h2><p>Vercel Inc. – 340 Pine Street, San Francisco, CA 94104, USA</p><h2>Propriété intellectuelle</h2><p>Tout le contenu est protégé par le droit d'auteur. Reproduction interdite sans autorisation.</p><h2>Responsabilité</h2><p>VetUrgence+ est un outil d'aide à la décision. Il ne remplace pas un avis vétérinaire professionnel.</p>`,
   cgv: `<h2>Conditions Générales de Vente</h2><p><strong>Vendeur :</strong> [VOTRE SOCIÉTÉ] – SIRET [SIRET] – [ADRESSE]</p><h2>Tarifs</h2><ul><li>SOS Instant : 2,99€ par analyse</li><li>SOS Localisation : 4,99€ par analyse</li><li>Premium : 9,99€/mois</li><li>Annuel : 59,88€/an</li></ul><h2>Paiement</h2><p>Paiements sécurisés par Stripe. Prix TTC en euros. Aucune donnée bancaire stockée.</p><h2>Droit de rétractation</h2><p>Conformément à l'article L221-28 du Code de la consommation, le droit de rétractation ne s'applique pas aux contenus numériques fournis immédiatement.</p><h2>Résiliation</h2><p>Abonnements résiliables à tout moment via contact@veturgence.fr. Effet à la fin de la période en cours.</p>`,
