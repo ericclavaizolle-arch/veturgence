@@ -1,0 +1,24 @@
+{
+  "name": "VetUrgence+",
+  "short_name": "VetUrgence",
+  "description": "Urgences animales 24h/24 - Sachez en 30 secondes si c'est grave",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#7f1d1d",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M45 65c-15 0-25 15-25 25s15 10 25 10 25-5 25-10-10-25-25-25z' fill='%237f1d1d'/><ellipse cx='25' cy='45' rx='10' ry='15' transform='rotate(-15 25 45)' fill='%237f1d1d'/><ellipse cx='75' cy='45' rx='10' ry='15' transform='rotate(15 75 45)' fill='%237f1d1d'/><ellipse cx='40' cy='20' rx='8' ry='12' transform='rotate(-5 40 20)' fill='%237f1d1d'/><ellipse cx='60' cy='20' rx='8' ry='12' transform='rotate(5 60 20)' fill='%237f1d1d'/></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M45 65c-15 0-25 15-25 25s15 10 25 10 25-5 25-10-10-25-25-25z' fill='%237f1d1d'/><ellipse cx='25' cy='45' rx='10' ry='15' transform='rotate(-15 25 45)' fill='%237f1d1d'/><ellipse cx='75' cy='45' rx='10' ry='15' transform='rotate(15 75 45)' fill='%237f1d1d'/><ellipse cx='40' cy='20' rx='8' ry='12' transform='rotate(-5 40 20)' fill='%237f1d1d'/><ellipse cx='60' cy='20' rx='8' ry='12' transform='rotate(5 60 20)' fill='%237f1d1d'/></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
