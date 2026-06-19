@@ -450,7 +450,6 @@ function afficherRapport(json) {
 }
 
 function openGoogleMapsExternal() {
-  // Afficher un loader
   const loader = document.createElement('div');
   loader.id = 'geo-loader';
   loader.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;justify-content:center;align-items:center;z-index:9999;';
@@ -458,7 +457,6 @@ function openGoogleMapsExternal() {
   document.body.appendChild(loader);
   
   let resolved = false;
-  
   const timeout = setTimeout(() => {
     if (!resolved) {
       resolved = true;
@@ -513,29 +511,49 @@ async function essayerGeolocIP() {
 }
 
 function afficherLienMaps(localisation, estCoordonnees = false) {
-  // Fermer le modal rapport actuel
   closeModal('modal-rapport');
-  
-  // Créer un nouveau modal avec un VRAI LIEN visible
-  const modal = document.createElement('div');
-  modal.id = 'modal-maps-link';
-  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;justify-content:center;align-items:center;z-index:9999;padding:20px;';
   
   const url = estCoordonnees 
     ? `https://www.google.com/maps/search/veterinary+24h+open/${localisation},14z`
     : `https://www.google.com/maps/search/veterinary+24h+open/${encodeURIComponent(localisation)}`;
   
+  const modal = document.createElement('div');
+  modal.id = 'modal-maps-link';
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);display:flex;justify-content:center;align-items:center;z-index:9999;padding:20px;';
+  
   modal.innerHTML = `
-    <div style="background:white;border-radius:20px;padding:24px;max-width:320px;width:100%;text-align:center;">
-      <div style="font-size:48px;margin-bottom:12px;">📍</div>
-      <h3 style="font-size:18px;font-weight:bold;margin-bottom:8px;">Vétérinaires d'urgence</h3>
-      <p style="font-size:14px;color:#666;margin-bottom:20px;">Cliquez sur le bouton ci-dessous pour ouvrir Google Maps</p>
+    <div style="background:white;border-radius:20px;padding:24px;max-width:340px;width:100%;text-align:center;">
+      <div style="font-size:40px;margin-bottom:8px;">📍</div>
+      <h3 style="font-size:18px;font-weight:bold;margin-bottom:4px;">Vétérinaires d'urgence</h3>
+      <p style="font-size:13px;color:#666;margin-bottom:16px;">Cliquez ci-dessous pour ouvrir Google Maps</p>
+      
       <a href="${url}" target="_blank" rel="noopener noreferrer" 
-         style="display:block;background:#2563eb;color:white;font-weight:bold;padding:14px;border-radius:12px;text-decoration:none;font-size:16px;margin-bottom:12px;">
+         style="display:block;background:#2563eb;color:white;font-weight:bold;padding:14px;border-radius:12px;text-decoration:none;font-size:16px;margin-bottom:20px;">
         🗺️ Ouvrir Google Maps
       </a>
+      
+      <div style="text-align:left;background:#f9fafb;border-radius:12px;padding:16px;margin-bottom:16px;">
+        <p style="font-weight:bold;color:#1f2937;margin-bottom:8px;">📞 Numéros d'urgence :</p>
+        
+        <div style="margin-bottom:12px;">
+          <span style="font-size:13px;color:#4b5563;">🇫🇷 France métropolitaine :</span>
+          <a href="tel:3115" style="display:block;font-weight:bold;color:#dc2626;font-size:18px;text-decoration:none;margin-top:2px;">3115</a>
+          <span style="font-size:12px;color:#6b7280;">Service vétérinaire d'urgence 24h/24</span>
+        </div>
+        
+        <div style="margin-bottom:12px;">
+          <span style="font-size:13px;color:#4b5563;">🌴 DOM-TOM :</span>
+          <p style="font-size:13px;color:#374151;margin-top:4px;">Appelez votre clinique vétérinaire la plus proche. Un répondeur vous redirigera vers le vétérinaire de garde.</p>
+        </div>
+        
+        <div>
+          <span style="font-size:13px;color:#4b5563;">🌍 À l'étranger :</span>
+          <p style="font-size:13px;color:#374151;margin-top:4px;">Utilisez Google Maps ci-dessus. Les cliniques ouvertes 24h/24 apparaissent automatiquement.</p>
+        </div>
+      </div>
+      
       <button onclick="document.getElementById('modal-maps-link').remove()" 
-              style="width:100%;background:transparent;color:#666;font-weight:600;padding:12px;border-radius:12px;border:none;font-size:14px;cursor:pointer;">
+              style="width:100%;background:#f3f4f6;color:#374151;font-weight:600;padding:10px;border-radius:10px;border:none;font-size:14px;cursor:pointer;">
         Fermer
       </button>
     </div>
