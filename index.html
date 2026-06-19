@@ -555,10 +555,54 @@ function afficherVets(vets, userLat, userLng) {
 }
 
 function openGoogleMapsExternal() {
-  const lat = STATE.userLat||48.8566, lng = STATE.userLng||2.3522;
-  window.open(`https://www.google.com/maps/search/vétérinaire+urgence+24h+garde+ouvert/@${lat},${lng},14z`, '_blank');
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(
+      pos => {
+        const lat = pos.coords.latitude;
+        const lng = pos.coords.longitude;
+        STATE.userLat = lat;
+        STATE.userLng = lng;
+        // "veterinary" est un mot international compris par Google Maps partout dans le monde
+        window.open(`https://www.google.com/maps/search/veterinary+24h+open/@${lat},${lng},14z`, '_blank');
+      },
+      error => {
+        const ville = prompt('📍 Localisation refusée.\n\nEntrez votre ville pour trouver les urgences vétérinaires :', 'Paris');
+        if (ville && ville.trim()) {
+          chercherVilleEtOuvrirMaps(ville.trim());
+        }
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 0
+      }
+    );
+  } else {
+    const ville = prompt('📍 Votre navigateur ne supporte pas la géolocalisation.\n\nEntrez votre ville :', 'Paris');
+    if (ville && ville.trim()) {
+      chercherVilleEtOuvrirMaps(ville.trim());
+    }
+  }
 }
 
+async function chercherVilleEtOuvrirMaps(ville) {
+  try {
+    const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(ville)}`);
+    const data = await response.json();
+    
+    if (data.length > 0) {
+      const lat = parseFloat(data[0].lat);
+      const lng = parseFloat(data[0].lon);
+      STATE.userLat = lat;
+      STATE.userLng = lng;
+      window.open(`https://www.google.com/maps/search/veterinary+24h+open/@${lat},${lng},14z`, '_blank');
+    } else {
+      alert('Ville introuvable. Veuillez réessayer.');
+    }
+  } catch (error) {
+    alert('Erreur de recherche.');
+  }
+}
 const LEGAL = {
   mentions: `<h2>Mentions légales</h2><p><strong>Éditeur :</strong> [VOTRE SOCIÉTÉ]<br/>SIRET : [VOTRE SIRET]<br/>Adresse : [VOTRE ADRESSE]<br/>Email : contact@veturgence.fr<br/>Directeur de publication : [VOTRE NOM]</p><h2>Hébergement</h2><p>Vercel Inc. – 340 Pine Street, San Francisco, CA 94104, USA</p><h2>Propriété intellectuelle</h2><p>Tout le contenu est protégé par le droit d'auteur. Reproduction interdite sans autorisation.</p><h2>Responsabilité</h2><p>VetUrgence+ est un outil d'aide à la décision. Il ne remplace pas un avis vétérinaire professionnel.</p>`,
   cgv: `<h2>Conditions Générales de Vente</h2><p><strong>Vendeur :</strong> [VOTRE SOCIÉTÉ] – SIRET [SIRET] – [ADRESSE]</p><h2>Tarifs</h2><ul><li>SOS Instant : 2,99€ par analyse</li><li>SOS Localisation : 4,99€ par analyse</li><li>Premium : 9,99€/mois</li><li>Annuel : 59,88€/an</li></ul><h2>Paiement</h2><p>Paiements sécurisés par Stripe. Prix TTC en euros. Aucune donnée bancaire stockée.</p><h2>Droit de rétractation</h2><p>Conformément à l'article L221-28 du Code de la consommation, le droit de rétractation ne s'applique pas aux contenus numériques fournis immédiatement.</p><h2>Résiliation</h2><p>Abonnements résiliables à tout moment via contact@veturgence.fr. Effet à la fin de la période en cours.</p>`,
