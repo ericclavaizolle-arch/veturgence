@@ -53,9 +53,9 @@
     <div class="px-6 py-6">
       <div class="space-y-2 mb-6">
         <div class="flex items-center gap-3 text-sm text-gray-700"><span class="text-green-600 font-bold text-base">✓</span> Savoir si c'est grave ou non</div>
-        <div class="flex items-center gap-3 text-sm text-gray-700"><span class="text-green-600 font-bold text-base">✓</span> Éviter une consultation inutile</div>
+        <div class="flex items-center gap-3 text-sm text-gray-700"><span class="text-green-600 font-bold text-base">✓</span> Avoir une évaluation rapide</div>
         <div class="flex items-center gap-3 text-sm text-gray-700"><span class="text-green-600 font-bold text-base">✓</span> Trouver un vétérinaire de garde</div>
-        <div class="flex items-center gap-3 text-sm text-gray-700"><span class="text-green-600 font-bold text-base">✓</span> Être rassuré en moins de 30 secondes</div>
+        <div class="flex items-center gap-3 text-sm text-gray-700"><span class="text-green-600 font-bold text-base">✓</span> Être guidé en moins de 30 secondes</div>
       </div>
 
       <button onclick="openAnalyseModal()" class="w-full bg-red-800 hover:bg-red-900 text-white font-bold py-4 rounded-2xl text-base transition-all mb-2">Évaluer l'urgence gratuitement →</button>
@@ -71,13 +71,13 @@
         <div class="plan-card border-2 border-gray-200 rounded-2xl p-3" data-plan="instant" onclick="selectPlan(this)">
           <p class="text-xs font-semibold text-gray-600 mb-1">SOS Instant</p>
           <p class="text-xl font-black text-red-800">2,99€</p>
-          <p class="text-xs text-gray-400 mt-1">Diagnostic seul</p>
+          <p class="text-xs text-gray-400 mt-1">Évaluation de l'urgence seul</p>
         </div>
         <div class="plan-card border-2 border-red-800 rounded-2xl p-3 relative selected" data-plan="localisation" onclick="selectPlan(this)">
           <span class="absolute -top-2.5 left-1/2 -translate-x-1/2 bg-red-800 text-white text-xs font-bold px-2 py-0.5 rounded-full whitespace-nowrap">⭐ Recommandé</span>
           <p class="text-xs font-semibold text-gray-600 mb-1">SOS + GPS</p>
           <p class="text-xl font-black text-red-800">4,99€</p>
-          <p class="text-xs text-gray-400 mt-1">Diagnostic + Vétérinaires</p>
+          <p class="text-xs text-gray-400 mt-1">Évaluation + Vétérinaires</p>
         </div>
         <div class="plan-card border-2 border-gray-200 rounded-2xl p-3" data-plan="premium" onclick="selectPlan(this)">
           <p class="text-xs font-semibold text-gray-600 mb-1">Premium</p>
