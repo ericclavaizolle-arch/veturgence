@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VetUrgence+ - Bientôt disponible</title>
+    <meta name="description" content="L'application VetUrgence+ pour les urgences vétérinaires arrive bientôt. Soyez parmi les premiers à être prévenu.">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #991b1b 0%, #7f1d1d 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .logo {
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: #991b1b;
+            font-size: 32px;
+            margin-bottom: 16px;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+        
+        .features {
+            text-align: left;
+            margin: 32px 0;
+            padding: 24px;
+            background: #fef2f2;
+            border-radius: 12px;
+        }
+        
+        .feature {
+            display: flex;
+            align-items: center;
+            margin-bottom: 16px;
+            color: #333;
+        }
+        
+        .feature:last-child {
+            margin-bottom: 0;
+        }
+        
+        .feature-icon {
+            font-size: 24px;
+            margin-right: 12px;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        input[type="email"] {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="email"]:focus {
+            outline: none;
+            border-color: #991b1b;
+        }
+        
+        button {
+            width: 100%;
+            padding: 16px;
+            background: #991b1b;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background: #7f1d1d;
+        }
+        
+        .success-message {
+            display: none;
+            background: #10b981;
+            color: white;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 16px;
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-top: 24px;
+            color: #991b1b;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">🚑</div>
+        <h1>VetUrgence+ arrive bientôt !</h1>
+        <p class="subtitle">
+            L'application d'urgence vétérinaire qui vous guide pas à pas en cas d'urgence avec votre animal.
+        </p>
+        
+        <div class="features">
+            <div class="feature">
+                <span class="feature-icon">📍</span>
+                <span>Trouvez le vétérinaire d'urgence le plus proche</span>
+            </div>
+            <div class="feature">
+                <span class="feature-icon">🩺</span>
+                <span>Évaluez la gravité de la situation</span>
+            </div>
+            <div class="feature">
+                <span class="feature-icon">📞</span>
+                <span>Contactez directement une clinique</span>
+            </div>
+            <div class="feature">
+                <span class="feature-icon">📋</span>
+                <span>Accédez aux fiches d'urgence</span>
+            </div>
+        </div>
+        
+        <form id="email-form">
+            <div class="form-group">
+                <input type="email" id="email" placeholder="Votre email" required>
+            </div>
+            <button type="submit">🔔 Être prévenu du lancement</button>
+        </form>
+        
+        <div class="success-message" id="success-message">
+            ✅ Merci ! Vous serez parmi les premiers à être prévenu du lancement de VetUrgence+
+        </div>
+        
+        <a href="/blog.html" class="back-link">← Retour au blog</a>
+    </div>
+
+    <script>
+        document.getElementById('email-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            var email = document.getElementById('email').value;
+            
+            console.log('Email collecté:', email);
+            
+            document.getElementById('email-form').style.display = 'none';
+            document.getElementById('success-message').style.display = 'block';
+        });
+    </script>
+</body>
+</html>
