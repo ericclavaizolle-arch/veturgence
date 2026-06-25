@@ -1,7 +1,7 @@
-module.exports = function handler(req, res) {
+export default function handler(req, res) {
   // Extraire la ville et le symptôme de l'URL
-  const path = req.url.replace('/api/blog/', '');
-  const parts = path.split('/');
+  const path = req.url.replace('/api/blog', '');
+  const parts = path.split('/').filter(p => p);
   const ville = parts[0] || 'paris';
   const symptome = parts[1] || 'urgence';
   
@@ -178,4 +178,4 @@ module.exports = function handler(req, res) {
 
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.status(200).send(html);
-};
+}
