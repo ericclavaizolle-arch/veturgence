@@ -1,1 +1,8 @@
-{}
+{
+  "rewrites": [
+    {
+      "source": "/blog/:ville/:symptome",
+      "destination": "/api/blog/:ville/:symptome"
+    }
+  ]
+}
