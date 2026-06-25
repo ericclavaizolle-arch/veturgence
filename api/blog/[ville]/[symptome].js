@@ -8,70 +8,71 @@ export default function handler(req, res) {
   const villeFormatted = ville.charAt(0).toUpperCase() + ville.slice(1);
   const symptomeFormatted = symptome.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
   
-  // Base de contenu spécifique par symptôme (anti-duplicate)
+  // Contenu spécifique par symptôme : direct, pragmatique, tension maîtrisée
   const contenuSpecifique = {
     'ingestion-chocolat-noir': {
-      title: `Urgence Chocolat Noir ${villeFormatted} : Mon Chien en a Mangé, Que Faire ?`,
-      meta: `Mon chien a mangé du chocolat noir à ${villeFormatted} ? Découvrez les signes mortels en 30 minutes et les 3 gestes immédiats. Urgence vétérinaire 24h/24.`,
-      h1: `Chocolat Noir à ${villeFormatted} : Urgence Vitale en Moins de 2 Heures`,
-      intro: `Chaque minute compte. Le chocolat noir contient 3x plus de théobromine que le chocolat au lait. À ${villeFormatted}, les urgences vétérinaires pour intoxication au chocolat ont augmenté de 40% en 2025. Votre chien a mangé du chocolat noir ? Voici ce qui va se passer dans les prochaines heures et comment agir AVANT qu'il ne soit trop tard.`,
+      title: `Mon chien a mangé du chocolat à ${villeFormatted} : agissez maintenant`,
+      meta: `Chocolat ingéré à ${villeFormatted} ? Le chocolat noir peut être mortel pour un chien. Signes d'alerte, gestes immédiats et vétérinaire 24h/24 avec VetUrgence+.`,
+      h1: `Chocolat à ${villeFormatted} : ne minimisez pas`,
+      intro: `Le chocolat contient de la théobromine, toxique pour les chiens. Le chocolat noir est 3 fois plus concentré que le chocolat au lait. Un chien de 10kg peut présenter des symptômes graves avec seulement 100g de chocolat noir. Ne perdez pas de temps : observez, agissez, consultez si nécessaire.`,
       signes: [
-        'Vomissements dans les 2-4 heures (odeur caractéristique de chocolat)',
-        'Diarrhée noire ou sanglante',
-        'Tremblements musculaires visibles',
-        'Respiration rapide et saccadée',
-        'Agitation extrême ou au contraire prostration',
-        'Augmentation du rythme cardiaque (palpations visibles)'
+        'Vomissements dans les 2 à 6 heures',
+        'Diarrhée',
+        'Agitation anormale ou tremblements',
+        'Respiration accélérée',
+        'Soif excessive',
+        'Rigidité musculaire (cas graves)'
       ],
       gestes: [
-        'Notez IMMÉDIATEMENT la quantité exacte mangée et l\'heure',
-        'Gardez votre chien au calme dans un endroit frais',
-        'Préparez son carnet de santé et le poids exact de l\'animal',
-        'Ne le laissez JAMAIS seul, surveillez chaque minute'
+        'Notez IMMÉDIATEMENT l\'heure et la quantité ingérée',
+        'Identifiez le type de chocolat (noir, au lait, blanc, cacao pur)',
+        'Pesez votre chien si possible (le poids détermine la gravité)',
+        'Gardez-le au calme dans un endroit frais',
+        'Préparez son carnet de santé'
       ],
       interdits: [
-        'NE JAMAIS faire vomir sans avis vétérinaire (risque d\'étouffement)',
-        'NE JAMAIS donner de lait (aggrave l\'absorption de la théobromine)',
-        'NE JAMAIS attendre "pour voir si ça passe" (le chocolat noir tue en 6-12h)',
-        'NE JAMAIS donner de médicaments humains (paracétamol, ibuprofène = mortel)'
+        'Ne faites PAS vomir sans avis vétérinaire (risque de fausse route)',
+        'Ne donnez AUCUN médicament humain (paracétamol, ibuprofène = dangereux)',
+        'Ne donnez pas de lait (inefficace et peut aggraver)',
+        'N\'attendez PAS "de voir si ça passe" : les symptômes peuvent apparaître jusqu\'à 12h après'
       ],
-      urgence: `Si votre chien pèse moins de 10kg et a mangé plus de 50g de chocolat noir, c'est une URGENCE ABSOLUE. À ${villeFormatted}, les cliniques vétérinaires d'urgence traitent en moyenne 3 cas par semaine. Chaque heure perdue réduit les chances de survie de 15%.`,
+      urgence: `Les petits chiens et les chiots sont particulièrement sensibles. Si votre chien présente des tremblements, une respiration très rapide ou semble désorienté, consultez IMMÉDIATEMENT un vétérinaire à ${villeFormatted}. Le chocolat noir peut provoquer des convulsions et des troubles cardiaques graves. VetUrgence+ vous permet de trouver une clinique ouverte en quelques secondes.`,
       faq: [
-        {q: `Mon chien a mangé du chocolat noir à ${villeFormatted} il y a 2 heures, est-ce encore urgent ?`, a: `OUI, c'est une URGENCE VITALE. La théobromine met 6-12h pour atteindre son pic toxique. À ${villeFormatted}, ouvrez immédiatement VetUrgence+ pour trouver un vétérinaire ouvert maintenant. Chaque minute compte.`},
-        {q: `Comment trouver un vétérinaire de garde ouvert maintenant à ${villeFormatted} ?`, a: `Utilisez l'application VetUrgence+ : géolocalisation instantanée des cliniques vétérinaires ouvertes 24h/24 à ${villeFormatted}. Vous verrez les adresses, distances et numéros d'urgence en 3 secondes.`},
-        {q: `Quel est le prix d'une consultation d'urgence pour intoxication à ${villeFormatted} ?`, a: `À ${villeFormatted}, une consultation d'urgence vétérinaire coûte entre 80€ et 150€ la nuit. VetUrgence+ vous montre les tarifs avant de vous déplacer. En cas d'intoxication au chocolat noir, chaque euro compte comparé à la vie de votre animal.`}
+        {q: `Mon chien a mangé du chocolat à ${villeFormatted}, quand dois-je m'inquiéter ?`, a: `Si votre chien pèse moins de 15kg et a ingéré plus de 50g de chocolat noir, consultez rapidement. Les symptômes peuvent apparaître jusqu'à 12h après. VetUrgence+ vous aide à localiser un vétérinaire ouvert à ${villeFormatted} immédiatement.`},
+        {q: `Comment trouver un vétérinaire ouvert maintenant à ${villeFormatted} ?`, a: `Ouvrez VetUrgence+ : l'application géolocalise instantanément les cliniques vétérinaires ouvertes 24h/24 autour de vous à ${villeFormatted}. Adresses, distances et numéros d'urgence en 3 secondes.`},
+        {q: `Que faire en attendant de consulter à ${villeFormatted} ?`, a: `Gardez votre chien au calme, notez l'heure et la quantité ingérée, préparez son carnet de santé. N'essayez pas de le faire vomir. Utilisez VetUrgence+ pour trouver la clinique la plus proche à ${villeFormatted}.`}
       ]
     },
     'default': {
-      title: `Urgence ${symptomeFormatted} ${villeFormatted} : Que Faire Maintenant ?`,
-      meta: `Votre animal présente ${symptomeFormatted.toLowerCase()} à ${villeFormatted} ? Signes d'alerte, gestes immédiats et vétérinaire 24h/24. Agissez en 5 minutes.`,
-      h1: `${symptomeFormatted} à ${villeFormatted} : Les 5 Minutes Qui Peuvent Sauver Votre Animal`,
-      intro: `À ${villeFormatted}, les urgences vétérinaires pour ${symptomeFormatted.toLowerCase()} surviennent en moyenne 3 fois par jour. Votre animal montre ces signes ? Vous avez exactement 5 minutes pour agir correctement. Voici ce que vous devez faire MAINTENANT, avant même de contacter un vétérinaire.`,
+      title: `${symptomeFormatted} chez mon animal à ${villeFormatted} : que faire ?`,
+      meta: `Votre animal présente ${symptomeFormatted.toLowerCase()} à ${villeFormatted} ? Ne minimisez pas : signes d'alerte, gestes immédiats et vétérinaire 24h/24 avec VetUrgence+.`,
+      h1: `${symptomeFormatted} à ${villeFormatted} : agissez rapidement`,
+      intro: `Si votre animal présente ${symptomeFormatted.toLowerCase()}, n'attendez pas que ça s'aggrave. Certains symptômes peuvent évoluer rapidement. Observez attentivement, notez les signes, et consultez si nécessaire. VetUrgence+ vous aide à trouver un vétérinaire ouvert à ${villeFormatted} en quelques secondes.`,
       signes: [
-        'Changement brutal de comportement (agitation ou prostration)',
-        'Refus de manger ou de boire depuis plus de 6 heures',
+        'Changement brutal de comportement',
+        'Refus de manger ou de boire depuis plusieurs heures',
         'Respiration anormale (rapide, saccadée, bruyante)',
         'Difficulté à se déplacer ou à se lever',
-        'Gémissements, plaintes ou signes de douleur visibles',
-        'Température corporelle anormale (chaud ou froid au toucher)'
+        'Gémissements ou signes de douleur',
+        'Température anormale au toucher'
       ],
       gestes: [
-        'Restez CALME : votre stress aggrave l\'état de l\'animal',
-        'Notez l\'heure exacte d\'apparition des premiers symptômes',
-        'Isolez votre animal dans un endroit calme, frais et sécurisé',
-        'Préparez son carnet de santé, son poids et ses traitements en cours'
+        'Restez calme : votre stress aggrave l\'état de l\'animal',
+        'Notez l\'heure exacte d\'apparition des premiers signes',
+        'Isolez votre animal dans un endroit calme et sécurisé',
+        'Préparez son carnet de santé et notez son poids'
       ],
       interdits: [
-        'NE JAMAIS donner de médicaments humains (paracétamol, aspirine = mortel)',
-        'NE JAMAIS forcer à manger ou boire (risque de fausse route)',
-        'NE JAMAIS attendre "que ça passe" (les symptômes s\'aggravent en 30 minutes)',
-        'NE JAMAIS appliquer de remèdes de grand-mère (huile, lait, etc.)'
+        'Ne donnez AUCUN médicament humain sans avis vétérinaire',
+        'Ne forcez pas votre animal à manger ou boire',
+        'N\'attendez pas "que ça passe" : certains symptômes s\'aggravent rapidement',
+        'N\'appliquez pas de remèdes de grand-mère sans avis professionnel'
       ],
-      urgence: `À ${villeFormatted}, les délais d'attente aux urgences vétérinaires peuvent atteindre 2 heures en pleine nuit. Anticipez : utilisez VetUrgence+ pour localiser la clinique la plus proche AVANT la crise. Chaque minute compte quand la vie de votre animal est en jeu.`,
+      urgence: `Si les symptômes persistent plus de quelques heures ou s'aggravent, consultez rapidement un vétérinaire à ${villeFormatted}. Les animaux ne peuvent pas dire ce qu'ils ressentent : mieux vaut consulter trop tôt que trop tard. VetUrgence+ vous permet de localiser immédiatement une clinique ouverte.`,
       faq: [
-        {q: `Mon animal présente ${symptomeFormatted.toLowerCase()} à ${villeFormatted}, dois-je consulter immédiatement ?`, a: `OUI. À ${villeFormatted}, les vétérinaires d'urgence recommandent de consulter dans les 30 minutes suivant l'apparition de ${symptomeFormatted.toLowerCase()}. Ouvrez VetUrgence+ pour trouver une clinique ouverte maintenant.`},
-        {q: `Comment trouver un vétérinaire disponible tout de suite à ${villeFormatted} ?`, a: `L'application VetUrgence+ géolocalise instantanément les cliniques vétérinaires ouvertes 24h/24 à ${villeFormatted}. Vous voyez les distances, horaires et numéros d'urgence en temps réel.`},
-        {q: `Quel budget prévoir pour une urgence vétérinaire à ${villeFormatted} ?`, a: `À ${villeFormatted}, une consultation d'urgence coûte entre 80€ et 200€ selon l'heure et la gravité. VetUrgence+ affiche les tarifs avant déplacement. Mieux vaut prévenir que guérir.`}
+        {q: `Mon animal présente ${symptomeFormatted.toLowerCase()} à ${villeFormatted}, est-ce urgent ?`, a: `Si les symptômes persistent plus de 2-3 heures ou s'aggravent, consultez rapidement. VetUrgence+ vous aide à trouver un vétérinaire ouvert à ${villeFormatted} en quelques secondes.`},
+        {q: `Comment trouver un vétérinaire disponible à ${villeFormatted} ?`, a: `Ouvrez VetUrgence+ : l'application géolocalise les cliniques vétérinaires ouvertes 24h/24 à ${villeFormatted}. Vous voyez les adresses et numéros immédiatement.`},
+        {q: `Que faire en attendant de consulter à ${villeFormatted} ?`, a: `Gardez votre animal au calme, notez l'heure d'apparition des symptômes, préparez son carnet de santé. Utilisez VetUrgence+ pour trouver la clinique la plus proche.`}
       ]
     }
   };
@@ -92,12 +93,12 @@ export default function handler(req, res) {
   };
   
   const symptomesSimilaires = [
-    { slug: 'vomissements', nom: 'Mon chien vomit' },
+    { slug: 'vomissements', nom: 'Mon animal vomit' },
     { slug: 'difficulte-respirer', nom: 'Mon animal respire mal' },
-    { slug: 'prostration', nom: 'Mon chien ne bouge plus' },
-    { slug: 'tremblements', nom: 'Mon chien tremble' },
-    { slug: 'diarrhee-sanglante', nom: 'Diarrhée avec sang' },
-    { slug: 'convulsions', nom: 'Convulsions et crises' }
+    { slug: 'prostration', nom: 'Mon animal ne bouge plus' },
+    { slug: 'tremblements', nom: 'Mon animal tremble' },
+    { slug: 'diarrhee', nom: 'Mon animal a la diarrhée' },
+    { slug: 'perte-appetit', nom: 'Mon animal ne mange plus' }
   ];
   
   const articlesSimilairesHTML = symptomesSimilaires
@@ -148,16 +149,16 @@ export default function handler(req, res) {
             </p>
 
             <div class="prose prose-lg max-w-none">
-                <p class="text-lg font-semibold text-red-800 mb-4 leading-relaxed">
+                <p class="text-lg text-gray-700 mb-4 leading-relaxed">
                     ${contenu.intro}
                 </p>
 
-                <h2 class="text-2xl font-bold text-red-900 mt-6 mb-3">⚠️ Signes qui doivent vous alerter IMMÉDIATEMENT</h2>
+                <h2 class="text-2xl font-bold text-red-900 mt-6 mb-3">⚠️ Signes à surveiller</h2>
                 <ul class="list-disc list-inside space-y-2 mb-4">
                     ${contenu.signes.map(s => `<li class="text-gray-700">${s}</li>`).join('')}
                 </ul>
 
-                <h2 class="text-2xl font-bold text-red-900 mt-6 mb-3">✅ Ce qu'il faut faire TOUT DE SUITE (dans les 5 premières minutes)</h2>
+                <h2 class="text-2xl font-bold text-red-900 mt-6 mb-3">✅ Ce qu'il faut faire IMMÉDIATEMENT</h2>
                 <ul class="list-disc list-inside space-y-2 mb-4">
                     ${contenu.gestes.map(g => `<li class="text-gray-700">${g}</li>`).join('')}
                 </ul>
@@ -167,14 +168,14 @@ export default function handler(req, res) {
                     ${contenu.interdits.map(i => `<li class="text-gray-700">${i}</li>`).join('')}
                 </ul>
 
-                <h2 class="text-2xl font-bold text-red-900 mt-6 mb-3">🚨 Quand consulter en urgence absolue</h2>
+                <h2 class="text-2xl font-bold text-red-900 mt-6 mb-3">🚨 Quand consulter rapidement</h2>
                 <p class="mb-4 text-gray-700">
                     ${contenu.urgence}
                 </p>
 
                 <div class="bg-red-50 border-l-4 border-red-800 p-4 my-6">
                     <p class="font-bold text-red-900 mb-2">
-                        🚨 Ouvrez immédiatement votre application VetUrgence+ et trouvez votre centre d'urgence ou clinique d'urgence la plus proche à ${villeFormatted}.
+                        🚨 Ouvrez votre application VetUrgence+ et trouvez la clinique d'urgence la plus proche à ${villeFormatted}.
                     </p>
                     <p class="text-red-800">
                         VetUrgence+ est LE réflexe à avoir en cas d'urgence.
@@ -188,7 +189,7 @@ export default function handler(req, res) {
         </article>
 
         <section class="bg-white rounded-lg shadow-md p-6 mb-8">
-            <h2 class="text-2xl font-bold text-red-900 mb-4">Questions fréquentes à ${villeFormatted}</h2>
+            <h2 class="text-2xl font-bold text-red-900 mb-4">Questions fréquentes</h2>
             ${contenu.faq.map(f => `
                 <div class="mb-4 pb-4 border-b">
                     <h3 class="font-bold text-lg text-red-800 mb-2">${f.q}</h3>
@@ -198,7 +199,7 @@ export default function handler(req, res) {
         </section>
 
         <section class="bg-white rounded-lg shadow-md p-6 mb-8">
-            <h2 class="text-2xl font-bold text-red-900 mb-4">Autres urgences vétérinaires à ${villeFormatted}</h2>
+            <h2 class="text-2xl font-bold text-red-900 mb-4">Autres situations d'urgence à ${villeFormatted}</h2>
             <div class="space-y-2">
                 ${articlesSimilairesHTML}
             </div>
