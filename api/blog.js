@@ -1,4 +1,4 @@
-export default function handler(req, res) {
+module.exports = function handler(req, res) {
   // Extraire la ville et le symptôme de l'URL
   const path = req.url.replace('/api/blog/', '');
   const parts = path.split('/');
@@ -178,4 +178,4 @@ export default function handler(req, res) {
 
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   res.status(200).send(html);
-}
+};
