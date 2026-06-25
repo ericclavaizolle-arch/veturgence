@@ -1,8 +1,27 @@
 {
-  "name": "veturgence",
-  "version": "1.0.0",
-  "private": true,
-  "dependencies": {
-    "stripe": "^14.0.0"
-  }
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/**/*.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "**/*.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "**/*.json",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/blog/([^/]+)/([^/]+)",
+      "dest": "/api/blog.js?ville=$1&symptome=$2"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ]
 }
